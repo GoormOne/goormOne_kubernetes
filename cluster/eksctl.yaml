@@ -1,0 +1,51 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: goormOne-eks
+  region: ap-northeast-2
+  tags:
+    Environment: dev
+
+
+
+vpc:
+  nat:
+    gateway: Single
+  clusterEndpoints :
+    privateAccess : true
+  subnets:
+    private:
+      ap-northeast-2a: { id: "subnet-084f0a6e2a2b3f5ed" }  # Private-Subnet1
+      ap-northeast-2c: { id: "subnet-02c4a6077be3f7272" }  # Private-Subnet2
+
+
+managedNodeGroups:
+  - name: standard-workers
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 2
+    volumeSize: 25
+    volumeType : gp3
+    volumeEncrypted: true
+    privateNetworking : true
+    availabilityZones:
+      - ap-northeast-2a
+      - ap-northeast-2c
+    ssh:
+      allow: true
+      publicKeyName: gooroom
+addons:
+  - name: vpc-cni
+  - name: coredns
+  - name: kube-proxy
+
+# 클라우드워치 로깅 설정 (선택사항)
+cloudWatch:
+  clusterLogging:
+    enableTypes: []  # 활성화할 로그 타입 목록
+
+iam:
+  withOIDC: true
+
