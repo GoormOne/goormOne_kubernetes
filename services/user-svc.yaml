@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: user-service
-  namespace: goormone-msa
+#  namespace: goormone-msa
   labels:
     app: user-service
 spec:

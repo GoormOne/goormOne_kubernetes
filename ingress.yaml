@@ -1,0 +1,61 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: title
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 8080
+          - path: /common
+            pathType: Prefix
+            backend:
+              service:
+                name: common-service
+                port:
+                  number: 8080
+          - path: /user
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8080
+          - path: /store
+            pathType: Prefix
+            backend:
+              service:
+                name: store-service
+                port:
+                  number: 8080
+          - path: /payment
+            pathType: Prefix
+            backend:
+              service:
+                name: payment-service
+                port:
+                  number: 8080
+          - path: /ai
+            pathType: Prefix
+            backend:
+              service:
+                name: ai-service
+                port:
+                  number: 8080
+
+          - path: /order
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 8080
