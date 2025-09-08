@@ -1,12 +1,13 @@
-#apiVersion: v1
-#kind: ConfigMap
-#metadata:
-#  name: msa-config
-#  namespace: goormone-msa
-#data:
-#  # Spring Boot 공통 설정
-#  SPRING_PROFILES_ACTIVE: "dev"
-#  SERVER_PORT: "8080"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: msa-config
+  namespace: goormone-msa
+data:
+  # Spring Boot 공통 설정
+
+  SPRING_PROFILES_ACTIVE: "dev"
+  SERVER_PORT: "8080"
 #  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
 #  MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "always"
 #
@@ -23,18 +24,18 @@
 #  DB_PORT: "5432"
 #  DB_NAME: "goormone_db"
 #
-#---
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  name: msa-secret
-#  namespace: goormone-msa
-#type: Opaque
-#data:
-#
-#  DB_USERNAME: postgres # goormone
-#  DB_PASSWORD: Goorm1!  # password
-#  REDIS_PASSWORD: ""         # Redis 비밀번호 없음
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: msa-secret
+  namespace: goormone-msa
+type: Opaque
+data:
+
+  DB_USERNAME: postgres # goormone
+  DB_PASSWORD: Goorm1!  # password
+  REDIS_PASSWORD: ""         # Redis 비밀번호 없음
 #
 #
 #---

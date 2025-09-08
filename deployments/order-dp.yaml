@@ -27,16 +27,12 @@ spec:
           ports:
             - containerPort: 8080
               name: http
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: "dev"
-            - name: JAVA_OPTS
-              value: "-Dspring.profiles.active=dev"
-#          envFrom:
-#            - configMapRef:
-#                name: msa-config
-#            - secretRef:
-#                name: msa-secret
+
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
           resources:
             requests:
               cpu: 500m
