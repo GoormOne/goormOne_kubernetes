@@ -50,7 +50,7 @@ spec:
               service:
                 name: ai-service
                 port:
-                  number: 8080
+                  number: 8000
 
           - path: /order
             pathType: Prefix
