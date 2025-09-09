@@ -25,7 +25,7 @@ managedNodeGroups:
     instanceType: t3.medium
     desiredCapacity: 2
     minSize: 2
-    maxSize: 2
+    maxSize: 4
     volumeSize: 25
     volumeType : gp3
     volumeEncrypted: true
