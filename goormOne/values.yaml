@@ -90,7 +90,7 @@ services:
     service:
       type: ClusterIP
       port: 80
-      targetPort: 8080
+      targetPort: 8000
     resources:
       requests:
         cpu: 500m
