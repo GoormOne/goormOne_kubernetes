@@ -132,12 +132,12 @@ configMap:
 secret:
   enabled: true
   stringData:
-    DB_USERNAME: "postgres"
-    DB_PASSWORD: "Goorm1!"
-    REDIS_PASSWORD: ""
-    OPENAI_API_KEY: "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"
-    MONGODB_URI: "mongodb+srv://ksm3255:!4786buch@team1mongodb.oh0o0np.mongodb.net/?retryWrites=true&w=majority&appName=Team1Mongodb"
-    MONGODB_NAME: "ai_service_db"
+    DB_USERNAME: "YOUR_DB_USERNAME"
+    DB_PASSWORD: "YOUR_DB_PASSWORD"
+    REDIS_PASSWORD: "YOUR_REDIS_PASSWORD"
+    OPENAI_API_KEY: "YOUR_OPENAI_API_KEY"
+    MONGODB_URI: "YOUR_MONGODB_URI"
+    MONGODB_NAME: "YOUR_MONGODB_NAME"
 
 # Legacy single service configuration (kept for backward compatibility)
 replicaCount: 1
