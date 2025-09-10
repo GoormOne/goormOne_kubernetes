@@ -3,59 +3,62 @@ kind: Ingress
 metadata:
   name: title
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/6f22a3d7adea2ca3
+    alb.ingress.kubernetes.io/target-type: ip
+
 spec:
-  ingressClassName: nginx
+  ingressClassName: alb
   rules:
     - http:
         paths:
           - path: /auth
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: auth-service
                 port:
-                  number: 8080
+                  name: http
           - path: /common
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: common-service
                 port:
-                  number: 8080
+                  name: http
           - path: /user
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: user-service
                 port:
-                  number: 8080
+                  name: http
           - path: /store
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: store-service
                 port:
-                  number: 8080
+                  name: http
           - path: /payment
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: payment-service
                 port:
-                  number: 8080
+                  name: http
           - path: /ai
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: ai-service
                 port:
-                  number: 8000
+                  name: http
 
           - path: /order
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: order-service
                 port:
-                  number: 8080
+                  name: http
