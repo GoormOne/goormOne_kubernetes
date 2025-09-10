@@ -23,26 +23,55 @@ spec:
 
       containers:
         - name: ai-service
-          #          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service:latest
-          image: bleuxsy/ai-service:latest
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service:2554cd4
+          #image: bleuxsy/ai-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
               name: http
 
-          envFrom:
-            - configMapRef:
-                name: msa-config
-            - secretRef:
-                name: msa-secret
 
-          resources:
-            requests:
-              cpu: 500m
-              memory: 512Mi
-            limits:
-              cpu: 1000m
-              memory: 1Gi
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+            - name: DB_USERNAME
+              valueFrom:
+                  secretKeyRef:
+                    name: ai-service-secret
+                    key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                    name: ai-service-secret
+                    key: DB_PASSWORD
+            - name: OPENAI_API_KEY
+              valueFrom:
+                  secretKeyRef:
+                    name: ai-service-secret
+                    key: OPENAI_API_KEY
+            - name: MONGODB_URI
+              valueFrom:
+                  secretKeyRef:
+                    name: ai-service-secret
+                    key: MONGODB_URI
+            - name: MONGODB_NAME
+              valueFrom:
+                  secretKeyRef:
+                    name: ai-service-secret
+                    key: MONGODB_NAME
+          #          envFrom:
+          #            - configMapRef:
+          #                name: msa-config
+          #            - secretRef:
+          #                name: msa-secret
+
+#          resources:
+#            requests:
+#              cpu: 500m
+#              memory: 512Mi
+#            limits:
+#              cpu: 1000m
+#              memory: 1Gi
       #          livenessProbe:
       #            httpGet:
       #              path: /actuator/health/liveness
