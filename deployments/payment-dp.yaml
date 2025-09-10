@@ -23,15 +23,18 @@ spec:
       containers:
         - name: payment-service
 #          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service:latest
-          image: bleuxsy/payment-service:latest
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service:c2d0cf5
           ports:
             - containerPort: 8080
               name: http
-          envFrom:
-            - configMapRef:
-                name: msa-config
-            - secretRef:
-                name: msa-secret
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+#          envFrom:
+#            - configMapRef:
+#                name: msa-config
+#            - secretRef:
+#                name: msa-secret
 
           resources:
             requests:
