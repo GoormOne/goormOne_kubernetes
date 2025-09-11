@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: ai-service
   #  namespace: goormone-msa
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /ai/health
   labels :
     app: ai-service
 spec:
