@@ -7,7 +7,7 @@ metadata:
     app: user-service
     component: msa
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: user-service
