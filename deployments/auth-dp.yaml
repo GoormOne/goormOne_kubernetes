@@ -23,7 +23,7 @@ spec:
 
       containers:
         - name: auth-service
-          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service:latest
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service:9d15e96
           #image: bleuxsy/auth-service:latest
 #          imagePullPolicy: IfNotPresent
           ports:

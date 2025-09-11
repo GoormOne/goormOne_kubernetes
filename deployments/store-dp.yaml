@@ -22,7 +22,7 @@ spec:
       #        node-type : app
       containers:
         - name: store-service
-          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service:latest
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service:3f6c7f2
           #image: bleuxsy/store-service:latest
           ports:
             - containerPort: 8080

@@ -22,7 +22,7 @@ spec:
       #        node-type : app
       containers:
         - name: order-service
-          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service:c914b93
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service:3f6c7f2
           #image: bleuxsy/order-service:latest
           ports:
             - containerPort: 8080
