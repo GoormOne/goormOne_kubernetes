@@ -4,7 +4,7 @@ metadata:
   name: title
   annotations:
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/6f22a3d7adea2ca3
+    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/0bc3d8c727672b8d
     alb.ingress.kubernetes.io/target-type: ip
 
 spec:

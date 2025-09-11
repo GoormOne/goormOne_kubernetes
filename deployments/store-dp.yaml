@@ -31,6 +31,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "dev"
 
+
           #          envFrom:
           #            - configMapRef:
           #                name: msa-config
