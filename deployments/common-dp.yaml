@@ -22,7 +22,7 @@ spec:
       #        node-type : app
       containers:
         - name: common-service
-          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service:4484dca
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service:latest
           #image: bleuxsy/common-service:latest
           ports:
             - containerPort: 8080
