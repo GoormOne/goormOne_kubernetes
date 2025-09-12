@@ -10,6 +10,8 @@ serviceAccount:
 
 # Fluent Bit의 핵심 설정 부분입니다.
 config:
+
+
   # Input 섹션: 어디서 로그를 수집할지 정의
   inputs: |
     [INPUT]
@@ -34,18 +36,24 @@ config:
         K8S-Logging.Parser  On
         K8S-Logging.Exclude Off
 
+    # (★★★ 추가됨) 'component: msa' 레이블을 가진 파드의 로그만 선택하기 위한 필터
+    [FILTER]
+        Name                rewrite_tag
+        Match               kube.*
+        # kubernetes.labels.component가 'msa'인 로그에 'msa.logs' 태그를 붙입니다.
+        Rule                $kubernetes['labels']['component'] ^msa$ msa.logs true
+        Emitter_Name        re_emitted
+
   # =======================================================
   # Output 섹션: 가공된 로그를 어디로 보낼지 정의 (가장 중요!)
   # =======================================================
   outputs: |
     [OUTPUT]
         Name            kafka
-        Match           *
-        # !!! 중요: 본인의 MSK 클러스터 부트스트랩 브로커 주소로 변경하세요.
-        Brokers         b-1.xxxx.kafka.ap-northeast-2.amazonaws.com:9094,b-2.xxxx.kafka.ap-northeast-2.amazonaws.com:9094
+        Match           msa.logs
+        Brokers         b-1.groommskcluster.107idq.c3.kafka.ap-northeast-2.amazonaws.com:9094,b-2.groommskcluster.107idq.c3.kafka.ap-northeast-2.amazonaws.com:9094
         # !!! 중요: 로그를 보낼 Kafka 토픽 이름으로 변경하세요.
         Topics          eks-app-logs
         # MSK는 TLS 통신을 사용하므로 SSL 프로토콜을 지정합니다.
         rdkafka.security.protocol   ssl
-        # Kafka로 보낼 메시지 형식을 JSON으로 지정합니다.
         Format          json
