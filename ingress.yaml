@@ -4,15 +4,18 @@ metadata:
   name: title
   annotations:
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e
+#    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+
 
 spec:
   ingressClassName: alb
   rules:
     - http:
+
         paths:
+
           - path: /auth
             pathType: ImplementationSpecific
             backend:
@@ -63,3 +66,4 @@ spec:
                 name: order-service
                 port:
                   name: http
+

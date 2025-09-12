@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 50000
+              name: agent
+          env:
+            - name: JAVA_OPTS
+              value: "-Djenkins.install.runSetupWizard=false"
+            - name: JENKINS_OPTS
+              value: "--prefix=/jenkins"
+          volumeMounts:
+            - name: jenkins-data
+              mountPath: /var/jenkins_home
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "3Gi"
+              cpu: "2000m"
+          readinessProbe:
+            httpGet:
+              path: /jenkins/login
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /jenkins/login
+              port: 8080
+            initialDelaySeconds: 120
+            periodSeconds: 10
+      volumes:
+        - name: jenkins-data
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
