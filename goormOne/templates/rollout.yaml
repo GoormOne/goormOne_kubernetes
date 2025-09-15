@@ -1,0 +1,131 @@
+{{- range $serviceName, $service := .Values.services}}
+{{- if $service.enabled }}
+{{- if $service.canary.enabled }}
+# Rollout for Canary deployment
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ $serviceName }}-service-rollout
+  labels:
+    app: {{ $serviceName }}-service
+    component: msa
+spec:
+  replicas: {{ $service.replicaCount | default 1 }}
+  strategy:
+    canary:
+      # 카나리 배포 설정
+      steps:
+      - setWeight: {{ $service.canary.initialWeight | default 10 }}  # 10% 트래픽으로 시작
+      - pause: { duration: {{ $service.canary.pauseDuration | default "30s" }} }  # 30초 대기
+      - setWeight: {{ $service.canary.middleWeight | default 50 }}  # 50% 트래픽으로 증가
+      - pause: { duration: {{ $service.canary.pauseDuration | default "30s" }} }  # 30초 대기
+      - setWeight: 100  # 100% 트래픽으로 완전 배포
+      
+      # 트래픽 라우팅 설정
+      trafficRouting:
+        nginx:
+          stableIngress: {{ $serviceName }}-ingress
+          canaryIngress: {{ $serviceName }}-canary-ingress
+      
+      # 자동 프로모션 설정 (선택사항)
+      {{- if $service.canary.autoPromotionEnabled }}
+      autoPromotionEnabled: true
+      {{- else }}
+      autoPromotionEnabled: false
+      {{- end }}
+      
+      # 분석 템플릿 (메트릭 기반 자동 프로모션)
+      {{- if $service.canary.analysis.enabled }}
+      analysis:
+        templates:
+        - templateName: {{ $serviceName }}-success-rate
+        startingStep: 1
+        args:
+        - name: service-name
+          value: {{ $serviceName }}-service
+      {{- end }}
+
+  selector:
+    matchLabels:
+      app: {{ $serviceName }}-service
+  
+  template:
+    metadata:
+      labels:
+        app: {{ $serviceName }}-service
+        component: msa
+    spec:
+      containers:
+        - name: {{ $serviceName }}-service
+          image: "{{ $service.image.repository }}:{{ $service.image.tag | default "latest" }}"
+          imagePullPolicy: {{ $service.image.pullPolicy | default "IfNotPresent" }}
+          
+          ports:
+            - name: http
+              containerPort: {{ $service.service.targetPort | default 8080 }}
+          
+          envFrom:
+            - configMapRef:
+                name: {{ $.Values.global.configMap.name }}
+            {{- if $.Values.global.secret }}
+            - secretRef:
+                name: {{ $.Values.global.secret.name }}
+            {{- end }}
+          
+          {{- with $service.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          
+          # 헬스체크 설정
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: {{ $service.service.targetPort | default 8080 }}
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: {{ $service.service.targetPort | default 8080 }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+{{- if $service.canary.analysis.enabled }}
+---
+# 분석 템플릿 (성공률 기반)
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: {{ $serviceName }}-success-rate
+  labels:
+    app: {{ $serviceName }}-service
+spec:
+  args:
+  - name: service-name
+  - name: canary-hash
+  metrics:
+  - name: success-rate
+    interval: 30s
+    count: 5
+    successCondition: result[0] >= 0.95
+    failureCondition: result[0] < 0.95
+    provider:
+      prometheus:
+        address: http://prometheus.monitoring.svc.cluster.local:9090
+        query: >
+          (
+            sum(rate(http_requests_total{job="{{`{{.args.service-name}}`}}", status!~"5.."}[2m])) /
+            sum(rate(http_requests_total{job="{{`{{.args.service-name}}`}}"}[2m]))
+          ) or vector(1)
+{{- end }}
+
+{{- end }}
+{{- end }}
+{{- end }}

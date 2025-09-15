@@ -1,0 +1,26 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:DescribeCluster",
+                "eks:ListClusters",
+                "eks:DescribeNodegroup",
+                "eks:ListNodegroups",
+                "eks:DescribeUpdate",
+                "eks:ListUpdates",
+                "eks:DescribeFargateProfile",
+                "eks:ListFargateProfiles"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:GetCallerIdentity"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

@@ -15,6 +15,16 @@ services:
       type: ClusterIP
       port: 80
       targetPort: 8080
+    
+    # 카나리 배포 설정
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
 
     resources:
       requests:
