@@ -5,6 +5,9 @@ metadata:
   labels:
     app: user-service
     component: msa
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: "user-service=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service"
+    argocd-image-updater.argoproj.io/ecr-secret-name: ecr-creds
 spec:
   replicas: 2
   strategy:
