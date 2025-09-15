@@ -1,21 +1,26 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.globalIngress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "goormOne.fullname" . }}
+  name: {{ include "goormOne.fullname" . }}-shared-ingress
   labels:
     {{- include "goormOne.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    ingress.kubernetes.io/group.name: {{ include "goormOne.fullname" . }}-group
+    {{- with .Values.globalIngress.annotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
-  {{- with .Values.ingress.className }}
+  {{- with .Values.globalIngress.className }}
   ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.globalIngress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.globalIngress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -24,20 +29,22 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    {{- range $serviceName, $service := .Values.services }}
+    {{- if $service.ingress.enabled }}
+    - host: {{ $service.ingress.host | quote }}
       http:
         paths:
-          {{- range .paths }}
+          {{- range $service.ingress.paths }}
           - path: {{ .path }}
             {{- with .pathType }}
             pathType: {{ . }}
             {{- end }}
             backend:
               service:
-                name: {{ include "goormOne.fullname" $ }}
+                name: {{ $serviceName }}-service
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ $service.service.port }}
           {{- end }}
+    {{- end }}
     {{- end }}
 {{- end }}

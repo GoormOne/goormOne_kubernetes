@@ -3,13 +3,25 @@ global:
     name: msa-config
   secret:
     name: msa-secret
+globalIngress:
+  enabled: true
+  name: title # Ingress 이름
+  className: alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/5a0cf7788c5e52f7
+    # alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e # 필요시 주석 해제
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]' # 리스너 포트
+  # tls: # HTTPS를 사용하려면 여기에 TLS 설정 추가
 services:
   user:
     enabled : true #이 서비스를 배포할 것인가?
     replicaCount : 2
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
-      tag: bc93aed
+      tag: bc93aed-new
       pullPolicy : IfNotPresent
     service:
       type: ClusterIP
@@ -25,6 +37,16 @@ services:
       autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+    ingress:
+      enabled: true
+      host: "" # 경로 기반 라우팅, 호스트 지정 안 함
+      paths:
+        - path: /user
+          pathType: ImplementationSpecific
 
     livenessProbe:
       httpGet:
@@ -51,10 +73,10 @@ services:
     resources:
       requests:
         cpu: 500m
-        memory: 512Mi
+        memory: 1Gi
       limits:
         cpu: 1000m
-        memory: 1Gi
+        memory: 2Gi
 
   order:
     enabled: true #이 서비스를 배포할 것인가?
@@ -75,6 +97,12 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+    ingress:
+      enabled: true
+      host: ""
+      paths:
+        - path: /order
+          pathType: ImplementationSpecific
   store:
     enabled : true #이 서비스를 배포할 것인가?
     replicaCount : 2
@@ -94,6 +122,12 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+    ingress:
+      enabled: true
+      host: ""
+      paths:
+        - path: /store
+          pathType: ImplementationSpecific
   auth:
     enabled: true #이 서비스를 배포할 것인가?
     replicaCount: 2
@@ -112,6 +146,12 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+    ingress:
+      enabled: true
+      host: ""
+      paths:
+        - path: /auth
+          pathType: ImplementationSpecific
   ai:
     enabled: true #이 서비스를 배포할 것인가?
     replicaCount: 2
@@ -130,13 +170,19 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+    ingress:
+      enabled: true
+      host: ""
+      paths:
+        - path: /ai
+          pathType: ImplementationSpecific
 
   payment:
     enabled: true #이 서비스를 배포할 것인가?
     replicaCount: 2
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service
-      tag: latest
+      tag: c2d0cf5
       pullPolicy: IfNotPresent
     service:
       type: ClusterIP
@@ -150,6 +196,12 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+    ingress:
+      enabled: true
+      host: ""
+      paths:
+        - path: /payment
+          pathType: ImplementationSpecific
   common:
     enabled: true #이 서비스를 배포할 것인가?
     replicaCount: 2
@@ -169,6 +221,12 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+    ingress:
+      enabled: true
+      host: ""
+      paths:
+        - path: /common
+          pathType: ImplementationSpecific
 
 # ConfigMap configuration
 configMap:

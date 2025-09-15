@@ -1,5 +1,6 @@
 {{- range $serviceName, $service := .Values.services}}
 {{- if $service.enabled }}
+  {{- if not (and $service.canary $service.canary.enabled) }}
 # services : 항목 반복
 # $serviceName -> key 이름 (ex, user, order, store)
 # $service ->key 에 해당하는 값
@@ -62,7 +63,8 @@ spec:
           {{- with $service.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+          {{- end }} # end of if not $service.canary.enabled
+{{- end }}
 {{- end }}
 {{- end }}
 
