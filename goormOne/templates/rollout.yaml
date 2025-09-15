@@ -1,6 +1,7 @@
 {{- range $serviceName, $service := .Values.services}}
 {{- if $service.enabled }}
-{{- if $service.canary.enabled }}
+{{- with $service.canary }}
+{{- if .enabled }}
 # Rollout for Canary deployment
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -96,6 +97,9 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 3
+
+{{- end }} # This is the end for if .enabled
+{{- end }} # This is the end for with $service.canary
 
 {{- if $service.canary.analysis.enabled }}
 ---
