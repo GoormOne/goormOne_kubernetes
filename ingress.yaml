@@ -7,6 +7,20 @@ metadata:
 #    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    # Argo Rollouts 카나리 배포를 위한 어노테이션
+    alb.ingress.kubernetes.io/actions.weighted-routing: |
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "user-service",
+              "servicePort": "8080",
+              "weight": 100
+            }
+          ]
+        }
+      }
 
 
 spec:
