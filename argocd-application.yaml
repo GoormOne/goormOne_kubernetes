@@ -1,6 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: user=user-service,order=order-service,store=store-service,auth=auth-service,ai=ai-service,payment=payment-service,common=common-service
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: feat/argocd
+    argocd-image-updater.argoproj.io/git-path: goormOne/values.yaml
+    argocd-image-updater.argoproj.io/argocd-url: https://argocd-server.argocd.svc.cluster.local
+    argocd-image-updater.argoproj.io/update-strategy: latest
+    argocd-image-updater.argoproj.io/user.update-strategy: latest
+    argocd-image-updater.argoproj.io/order.update-strategy: latest
+    argocd-image-updater.argoproj.io/store.update-strategy: latest
+    argocd-image-updater.argoproj.io/auth.update-strategy: latest
+    argocd-image-updater.argoproj.io/ai.update-strategy: latest
+    argocd-image-updater.argoproj.io/payment.update-strategy: latest
+    argocd-image-updater.argoproj.io/common.update-strategy: latest
   name: goormone-msa
   namespace: argocd
 spec:
