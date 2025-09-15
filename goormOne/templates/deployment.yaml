@@ -45,22 +45,8 @@ spec:
                 name: {{ $.Values.global.secret.name }}
                       {{- end }}
 
-          {{- with $service.env }}
-          env:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-
           {{- with $service.resources }}
           resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-
-          {{- with $service.livenessProbe }}
-          livenessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $service.readinessProbe }}
-          readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 {{- end }}
