@@ -16,6 +16,15 @@ imageUpdater:
       value: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
     - name: AWS_REGION
       value: ap-northeast-2
+  extraVolumes:
+    - name: registries-config
+      configMap:
+        name: argocd-image-updater-registries
+
+  extraVolumeMounts:
+    - name: registries-config
+      mountPath: /app/config/registries.yaml
+      subPath: registries.yaml
 globalIngress:
   enabled: true
   name: title # Ingress 이름
@@ -31,6 +40,8 @@ globalIngress:
 services:
   user:
     enabled : true #이 서비스를 배포할 것인가?
+    probes:
+      enabled: false
     replicaCount : 1
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
@@ -96,6 +107,8 @@ services:
   order:
     enabled: true #이 서비스를 배포할 것인가?
     replicaCount: 1
+    probes:
+      enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service
       tag: 3f6c7f2
@@ -137,6 +150,8 @@ services:
   store:
     enabled : true #이 서비스를 배포할 것인가?
     replicaCount : 1
+    probes:
+      enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service
       tag: 3f6c7f2
@@ -178,6 +193,8 @@ services:
   auth:
     enabled: true #이 서비스를 배포할 것인가?
     replicaCount: 1
+    probes:
+      enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service
       tag: 35e0499
@@ -218,6 +235,8 @@ services:
   ai:
     enabled: true #이 서비스를 배포할 것인가?
     replicaCount: 1
+    probes:
+      enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service
       tag: 2554cd4
@@ -258,6 +277,8 @@ services:
 
   payment:
     enabled: true #이 서비스를 배포할 것인가?
+    probes:
+      enabled: false
     replicaCount: 1
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service
@@ -298,7 +319,10 @@ services:
         - path: /payment
           pathType: ImplementationSpecific
   common:
+
     enabled: true #이 서비스를 배포할 것인가?
+    probes:
+      enabled: false
     replicaCount: 1
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service

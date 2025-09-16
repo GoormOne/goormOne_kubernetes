@@ -72,6 +72,7 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if $service.probes.enabled }}
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -88,6 +89,7 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 3
+            {{- end}}
 {{- end }} # end if canary.enabled
 
 {{- if and $service.canary $service.canary.analysis }}
