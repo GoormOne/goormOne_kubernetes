@@ -16,7 +16,6 @@ spec:
     canary:
       stableService: {{ $serviceName }}-service
       canaryService: {{ $serviceName }}-canary-service
-
       steps:
         - setWeight: {{ $service.canary.initialWeight | default 10 }}
         - pause: { duration: {{ $service.canary.pauseDuration | default "30s" }} }
@@ -24,14 +23,10 @@ spec:
         - pause: { duration: {{ $service.canary.pauseDuration | default "30s" }} }
         - setWeight: 100
       autoPromotionSeconds: {{ $service.canary.autoPromotionSeconds | default 0 }}
-
       trafficRouting:
         alb:
           ingress: {{ $.Values.globalIngress.name }}
           servicePort: {{ $service.service.port }}
-
-
-
       {{- if $service.canary.analysis }}
       analysis:
         templates:
@@ -68,6 +63,10 @@ spec:
             - secretRef:
                 name: {{ $.Values.global.secret.name }}
             {{- end }}
+          volumeMounts:
+            - name: registries-config
+              mountPath: /app/config/registries.yaml
+              subPath: registries.yaml
           {{- with $service.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
@@ -89,8 +88,12 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 3
-            {{- end}}
-{{- end }} # end if canary.enabled
+          {{- end }}
+
+      volumes:
+        - name: registries-config
+          configMap:
+            name: argocd-image-updater-registries
 
 {{- if and $service.canary $service.canary.analysis }}
 ---
@@ -119,5 +122,6 @@ spec:
               sum(rate(http_requests_total{job="{{`{{.args.service-name}}`}}"}[2m]))
             ) or vector(1)
 {{- end }}
+{{- end }} # end if canary.enabled
 {{- end }} # end if $service.enabled
 {{- end }} # end range
