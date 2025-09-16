@@ -35,7 +35,7 @@ services:
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
       tag: fc5b1db
-      pullPolicy : IfNotPresent
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -99,7 +99,7 @@ services:
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service
       tag: 3f6c7f2
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -181,7 +181,7 @@ services:
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service
       tag: 35e0499
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -221,7 +221,7 @@ services:
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service
       tag: 2554cd4
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -303,7 +303,7 @@ services:
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service
       tag: bc93aed
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
