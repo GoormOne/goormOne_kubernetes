@@ -21,4 +21,4 @@ extraVolumes:
 extraVolumeMounts:
   - name: registries-config
     mountPath: /app/config/registries.conf
-    subPath: registries.yaml
+    subPath: registries.conf
