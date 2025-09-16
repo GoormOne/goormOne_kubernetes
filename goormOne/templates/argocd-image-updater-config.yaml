@@ -10,4 +10,4 @@ data:
         api_url: https://490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
         prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
         default: true
-        credentials: ecr:aws_region=ap-northeast-2
+        credentials: ecr
