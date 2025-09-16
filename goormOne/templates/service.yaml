@@ -1,22 +1,38 @@
 {{- range $serviceName, $service := .Values.services }}
 {{- if $service.enabled }}
 ---
+# Stable Service
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ $serviceName }}-service
   labels:
-    app : {{ $serviceName }}-service
+    app: {{ $serviceName }}-service
 spec:
   type: {{ $service.service.type | default "ClusterIP" }}
   ports:
-    - port: {{ $service.service.port | default "80" }}
+    - port: {{ $service.service.port | default 80 }}
       targetPort: {{ $service.service.targetPort }}
       protocol: TCP
       name: http
   selector:
     app: {{ $serviceName }}-service
-
-
-  {{- end }}
-  {{- end }}
+---
+# Canary Service (for Rollout)
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $serviceName }}-canary-service
+  labels:
+    app: {{ $serviceName }}-service
+spec:
+  type: {{ $service.service.type | default "ClusterIP" }}
+  ports:
+    - port: {{ $service.service.port | default 80 }}
+      targetPort: {{ $service.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ $serviceName }}-service
+{{- end }}
+{{- end }}
