@@ -3,9 +3,19 @@ global:
     name: msa-config
   secret:
     name: msa-secret
-  serviceAccount:
-    create: false
-    name: argocd-image-updater
+  aws:
+    region: ap-northeast-2
+    assumeRole: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
+
+# Argo CD Image Updater 전용 환경변수
+imageUpdater:
+  extraEnv:
+    - name: AWS_ROLE_ARN
+      value: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    - name: AWS_REGION
+      value: ap-northeast-2
 globalIngress:
   enabled: true
   name: title # Ingress 이름
@@ -292,7 +302,7 @@ services:
     replicaCount: 2
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service
-      tag: 3f6c7f2
+      tag: bc93aed
       pullPolicy: IfNotPresent
     service:
       type: ClusterIP
