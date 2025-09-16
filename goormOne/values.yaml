@@ -21,7 +21,7 @@ services:
     replicaCount : 2
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
-      tag: bc93aed
+      tag: bc93aed-new-v2
       pullPolicy : IfNotPresent
     service:
       type: ClusterIP
@@ -34,7 +34,7 @@ services:
       initialWeight: 10  # 초기 트래픽 비율 (10%)
       middleWeight: 50   # 중간 트래픽 비율 (50%)
       pauseDuration: "30s"  # 각 단계별 대기 시간
-      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      autoPromotionSeconds: 30
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
       trafficRouting:
@@ -95,7 +95,7 @@ services:
       initialWeight: 10  # 초기 트래픽 비율 (10%)
       middleWeight: 50   # 중간 트래픽 비율 (50%)
       pauseDuration: "30s"  # 각 단계별 대기 시간
-      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      autoPromotionSeconds: 30
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
       trafficRouting:
@@ -134,6 +134,17 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
     ingress:
       enabled: true
       host: ""
@@ -164,7 +175,7 @@ services:
       initialWeight: 10  # 초기 트래픽 비율 (10%)
       middleWeight: 50   # 중간 트래픽 비율 (50%)
       pauseDuration: "30s"  # 각 단계별 대기 시간
-      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      autoPromotionSeconds: 30
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
       trafficRouting:
@@ -201,7 +212,7 @@ services:
       initialWeight: 10  # 초기 트래픽 비율 (10%)
       middleWeight: 50   # 중간 트래픽 비율 (50%)
       pauseDuration: "30s"  # 각 단계별 대기 시간
-      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      autoPromotionSeconds: 30
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
       trafficRouting:
@@ -240,7 +251,7 @@ services:
       initialWeight: 10  # 초기 트래픽 비율 (10%)
       middleWeight: 50   # 중간 트래픽 비율 (50%)
       pauseDuration: "30s"  # 각 단계별 대기 시간
-      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      autoPromotionSeconds: 30
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
       trafficRouting:
@@ -266,20 +277,19 @@ services:
       targetPort: 8080
 
     resources:
-      resources:
-        requests:
-          cpu: 100m
-          memory: 400Mi
-        limits:
-          cpu: 500m
-          memory: 800Mi
+      requests:
+        cpu: 100m
+        memory: 400Mi
+      limits:
+        cpu: 500m
+        memory: 800Mi
 
     canary:
       enabled: true  # 카나리 배포 활성화
       initialWeight: 10  # 초기 트래픽 비율 (10%)
       middleWeight: 50   # 중간 트래픽 비율 (50%)
       pauseDuration: "30s"  # 각 단계별 대기 시간
-      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      autoPromotionSeconds: 30
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
       trafficRouting:
