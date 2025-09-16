@@ -26,8 +26,8 @@ spec:
         alb:
           ingress: {{ $.Values.globalIngress.name }}
           servicePort: {{ $service.service.port }}
-          stableService: {{ $serviceName }}-service
-          canaryService: {{ $serviceName }}-canary-service
+          stableService: {{ $service.canary.trafficRouting.alb.stableService }}
+          canaryService: {{ $service.canary.trafficRouting.alb.canaryService }}
 
 
 
