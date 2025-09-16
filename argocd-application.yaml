@@ -68,7 +68,7 @@ spec:
       valueFiles:
         - values.yaml
         - values-secret.yaml
-        - values-image-updater.yaml
+
   destination:
     server: https://kubernetes.default.svc
     namespace: default
