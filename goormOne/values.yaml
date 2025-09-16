@@ -21,7 +21,7 @@ services:
     replicaCount : 2
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
-      tag: bc93aed-new-v2
+      tag: bc93aed
       pullPolicy : IfNotPresent
     service:
       type: ClusterIP
