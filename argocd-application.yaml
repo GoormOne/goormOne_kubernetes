@@ -5,7 +5,14 @@ metadata:
   namespace: argocd
   annotations:
     # ECR 이미지 감시
-    argocd-image-updater.argoproj.io/image-list: user=user-service,order=order-service,store=store-service,auth=auth-service,ai=ai-service,payment=payment-service,common=common-service
+    argocd-image-updater.argoproj.io/image-list: >
+      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service,
+      order=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service,
+      store=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service,
+      auth=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service,
+      ai=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service,
+      payment=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service,
+      common=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service
     argocd-image-updater.argoproj.io/git-commit-template: "Update images: {{.Images}}"
     # Git write-back
     argocd-image-updater.argoproj.io/write-back-method: git
@@ -61,6 +68,7 @@ spec:
       valueFiles:
         - values.yaml
         - values-secret.yaml
+        - values-image-updater.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: default
