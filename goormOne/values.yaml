@@ -3,6 +3,9 @@ global:
     name: msa-config
   secret:
     name: msa-secret
+  serviceAccount:
+    create: false
+    name: argocd-image-updater
 globalIngress:
   enabled: true
   name: title # Ingress 이름
@@ -30,11 +33,11 @@ services:
 
     resources:
       requests:
-        cpu: 100m
-        memory: 400Mi
-      limits:
         cpu: 500m
-        memory: 800Mi
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
     # 카나리 배포 설정
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -94,11 +97,11 @@ services:
 
     resources:
       requests:
-        cpu: 100m
-        memory: 400Mi
-      limits:
         cpu: 500m
-        memory: 800Mi
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -177,10 +180,10 @@ services:
     resources:
       requests:
         cpu: 500m
-        memory: 512Mi
+        memory: 1Gi
       limits:
         cpu: 1000m
-        memory: 1Gi
+        memory: 2Gi
 
     canary:
       enabled: true  # 카나리 배포 활성화

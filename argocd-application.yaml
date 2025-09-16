@@ -1,21 +1,46 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  annotations:
-    argocd-image-updater.argoproj.io/image-list: user=user-service,order=order-service,store=store-service,auth=auth-service,ai=ai-service,payment=payment-service,common=common-service
-    argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/git-branch: feat/argocd
-    argocd-image-updater.argoproj.io/argocd-url: https://argocd-server.argocd.svc.cluster.local
-    argocd-image-updater.argoproj.io/update-strategy: latest
-    argocd-image-updater.argoproj.io/user.update-strategy: latest
-    argocd-image-updater.argoproj.io/order.update-strategy: latest
-    argocd-image-updater.argoproj.io/store.update-strategy: latest
-    argocd-image-updater.argoproj.io/auth.update-strategy: latest
-    argocd-image-updater.argoproj.io/ai.update-strategy: latest
-    argocd-image-updater.argoproj.io/payment.update-strategy: latest
-    argocd-image-updater.argoproj.io/common.update-strategy: latest
   name: goormone-msa
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: |
+      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service,
+      order=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service,
+      store=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service,
+      auth=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service,
+      ai=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service,
+      payment=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service,
+      common=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service
+
+    # Git write-back
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: feat/argocd
+
+    # 공통 업데이트 전략
+    argocd-image-updater.argoproj.io/update-strategy: latest
+
+    # 서비스별 Helm value path 지정
+    argocd-image-updater.argoproj.io/user.helm.image-name: user.image.repository
+    argocd-image-updater.argoproj.io/user.helm.image-tag: user.image.tag
+
+    argocd-image-updater.argoproj.io/order.helm.image-name: order.image.repository
+    argocd-image-updater.argoproj.io/order.helm.image-tag: order.image.tag
+
+    argocd-image-updater.argoproj.io/store.helm.image-name: store.image.repository
+    argocd-image-updater.argoproj.io/store.helm.image-tag: store.image.tag
+
+    argocd-image-updater.argoproj.io/auth.helm.image-name: auth.image.repository
+    argocd-image-updater.argoproj.io/auth.helm.image-tag: auth.image.tag
+
+    argocd-image-updater.argoproj.io/ai.helm.image-name: ai.image.repository
+    argocd-image-updater.argoproj.io/ai.helm.image-tag: ai.image.tag
+
+    argocd-image-updater.argoproj.io/payment.helm.image-name: payment.image.repository
+    argocd-image-updater.argoproj.io/payment.helm.image-tag: payment.image.tag
+
+    argocd-image-updater.argoproj.io/common.helm.image-name: common.image.repository
+    argocd-image-updater.argoproj.io/common.helm.image-tag: common.image.tag
 spec:
   project: default
   source:
