@@ -40,6 +40,9 @@ spec:
         args:
           - name: service-name
             value: {{ $serviceName }}-service
+          - name: canary-hash
+            valueFrom:
+              podTemplateHash: true
       {{- end }}
 
   selector:

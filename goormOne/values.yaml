@@ -116,6 +116,7 @@ services:
       paths:
         - path: /order
           pathType: ImplementationSpecific
+
   store:
     enabled : true #이 서비스를 배포할 것인가?
     replicaCount : 2
@@ -128,13 +129,7 @@ services:
       port: 80
       targetPort: 8080
 
-    resources:
-      requests:
-        cpu: 500m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 1Gi
+
     canary:
       enabled: true  # 카나리 배포 활성화
       initialWeight: 10  # 초기 트래픽 비율 (10%)
@@ -148,6 +143,14 @@ services:
 
     analysis:
       enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
     ingress:
       enabled: true
       host: ""
@@ -165,13 +168,7 @@ services:
       type: ClusterIP
       port: 80
       targetPort: 8080
-    resources:
-      requests:
-        cpu: 500m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 1Gi
+
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -184,8 +181,15 @@ services:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
 
-      analysis:
-        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+    analysis:
+      enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
     ingress:
       enabled: true
       host: ""
@@ -203,13 +207,7 @@ services:
       type: ClusterIP
       port: 80
       targetPort: 8080
-    resources:
-      requests:
-        cpu: 100m
-        memory: 400Mi
-      limits:
-        cpu: 500m
-        memory: 800Mi
+
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -222,8 +220,15 @@ services:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
 
-      analysis:
-        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+    analysis:
+      enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+    resources:
+      requests:
+        cpu: 100m
+        memory: 400Mi
+      limits:
+        cpu: 500m
+        memory: 800Mi
     ingress:
       enabled: true
       host: ""
@@ -243,13 +248,7 @@ services:
       port: 80
       targetPort: 8080
 
-    resources:
-      requests:
-        cpu: 100m
-        memory: 400Mi
-      limits:
-        cpu: 500m
-        memory: 800Mi
+
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -262,8 +261,15 @@ services:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
 
-      analysis:
-        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+    analysis:
+      enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+    resources:
+      requests:
+        cpu: 100m
+        memory: 400Mi
+      limits:
+        cpu: 500m
+        memory: 800Mi
     ingress:
       enabled: true
       host: ""
