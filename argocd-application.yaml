@@ -12,26 +12,14 @@ metadata:
     argocd-image-updater.argoproj.io/git-branch: feat/argocd
 
     # 각 이미지별 업데이트 전략 및 태그 허용
-    argocd-image-updater.argoproj.io/user.update-strategy: latest
     argocd-image-updater.argoproj.io/user.allow-tags: regexp:^[0-9a-f]{7}$
-
-    argocd-image-updater.argoproj.io/order.update-strategy: latest
     argocd-image-updater.argoproj.io/order.allow-tags: regexp:^[0-9a-f]{7}$
-
-    argocd-image-updater.argoproj.io/store.update-strategy: latest
     argocd-image-updater.argoproj.io/store.allow-tags: regexp:^[0-9a-f]{7}$
-
-    argocd-image-updater.argoproj.io/auth.update-strategy: latest
     argocd-image-updater.argoproj.io/auth.allow-tags: regexp:^[0-9a-f]{7}$
-
-    argocd-image-updater.argoproj.io/ai.update-strategy: latest
     argocd-image-updater.argoproj.io/ai.allow-tags: regexp:^[0-9a-f]{7}$
-
-    argocd-image-updater.argoproj.io/payment.update-strategy: latest
     argocd-image-updater.argoproj.io/payment.allow-tags: regexp:^[0-9a-f]{7}$
-
-    argocd-image-updater.argoproj.io/common.update-strategy: latest
     argocd-image-updater.argoproj.io/common.allow-tags: regexp:^[0-9a-f]{7}$
+
 
     # Helm value path 지정 (values.yaml 구조 기준)
     argocd-image-updater.argoproj.io/user.helm.image-name: user.image.repository

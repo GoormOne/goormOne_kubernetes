@@ -56,7 +56,7 @@ spec:
     spec:
       containers:
         - name: {{ $serviceName }}-service
-          image: "{{ $service.image.repository }}:{{ $service.image.tag | default "latest" }}"
+          image: "{{ $service.image.repository }}:{{ $service.image.tag  }}"
           imagePullPolicy: {{ $service.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - name: http
