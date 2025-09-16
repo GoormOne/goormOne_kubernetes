@@ -15,7 +15,7 @@ spec:
   strategy:
     canary:
       stableService: {{ $serviceName }}-service
-        canaryService: {{ $serviceName }}-canary-service
+      canaryService: {{ $serviceName }}-canary-service
 
       steps:
         - setWeight: {{ $service.canary.initialWeight | default 10 }}

@@ -1,0 +1,927 @@
+---
+# Source: goormone/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: msa-secret
+  labels:
+    helm.sh/chart: goormone-0.1.0
+    app.kubernetes.io/name: goormone
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  DB_PASSWORD: YOUR_DB_PASSWORD
+  DB_USERNAME: YOUR_DB_USERNAME
+  MONGODB_NAME: YOUR_MONGODB_NAME
+  MONGODB_URI: YOUR_MONGODB_URI
+  OPENAI_API_KEY: YOUR_OPENAI_API_KEY
+  REDIS_PASSWORD: YOUR_REDIS_PASSWORD
+---
+# Source: goormone/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: msa-config
+
+  labels:
+    helm.sh/chart: goormone-0.1.0
+    app.kubernetes.io/name: goormone
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  SERVER_PORT: "8080"
+  SPRING_PROFILES_ACTIVE: dev
+---
+# Source: goormone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-service
+  labels:
+    app : ai-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: ai-service
+---
+# Source: goormone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  labels:
+    app : auth-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: auth-service
+---
+# Source: goormone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: common-service
+  labels:
+    app : common-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: common-service
+---
+# Source: goormone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  labels:
+    app : order-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: order-service
+---
+# Source: goormone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  labels:
+    app : payment-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: payment-service
+---
+# Source: goormone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: store-service
+  labels:
+    app : store-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: store-service
+---
+# Source: goormone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  labels:
+    app : user-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: user-service
+---
+# Source: goormone/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-release-goormone-shared-ingress
+  labels:
+    helm.sh/chart: goormone-0.1.0
+    app.kubernetes.io/name: goormone
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    ingress.kubernetes.io/group.name: my-release-goormone-group
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/5a0cf7788c5e52f7
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ""
+      http:
+        paths:
+          - path: /ai
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ai-service
+                port:
+                  number: 80
+    - host: ""
+      http:
+        paths:
+          - path: /auth
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 80
+    - host: ""
+      http:
+        paths:
+          - path: /common
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: common-service
+                port:
+                  number: 80
+    - host: ""
+      http:
+        paths:
+          - path: /order
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 80
+    - host: ""
+      http:
+        paths:
+          - path: /payment
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: payment-service
+                port:
+                  number: 80
+    - host: ""
+      http:
+        paths:
+          - path: /store
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: store-service
+                port:
+                  number: 80
+    - host: ""
+      http:
+        paths:
+          - path: /user
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 80
+---
+# Source: goormone/templates/rollout.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: ai-success-rate
+  labels:
+    app: ai-service
+spec:
+  args:
+    - name: service-name
+    - name: canary-hash
+  metrics:
+    - name: success-rate
+      interval: 30s
+      count: 5
+      successCondition: result[0] >= 0.95
+      failureCondition: result[0] < 0.95
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc.cluster.local:9090
+          query: >
+            (
+              sum(rate(http_requests_total{job="{{.args.service-name}}", status!~"5.."}[2m])) /
+              sum(rate(http_requests_total{job="{{.args.service-name}}"}[2m]))
+            ) or vector(1) # end if $service.enabled
+---
+# Source: goormone/templates/rollout.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: auth-success-rate
+  labels:
+    app: auth-service
+spec:
+  args:
+    - name: service-name
+    - name: canary-hash
+  metrics:
+    - name: success-rate
+      interval: 30s
+      count: 5
+      successCondition: result[0] >= 0.95
+      failureCondition: result[0] < 0.95
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc.cluster.local:9090
+          query: >
+            (
+              sum(rate(http_requests_total{job="{{.args.service-name}}", status!~"5.."}[2m])) /
+              sum(rate(http_requests_total{job="{{.args.service-name}}"}[2m]))
+            ) or vector(1) # end if $service.enabled
+---
+# Source: goormone/templates/rollout.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: common-success-rate
+  labels:
+    app: common-service
+spec:
+  args:
+    - name: service-name
+    - name: canary-hash
+  metrics:
+    - name: success-rate
+      interval: 30s
+      count: 5
+      successCondition: result[0] >= 0.95
+      failureCondition: result[0] < 0.95
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc.cluster.local:9090
+          query: >
+            (
+              sum(rate(http_requests_total{job="{{.args.service-name}}", status!~"5.."}[2m])) /
+              sum(rate(http_requests_total{job="{{.args.service-name}}"}[2m]))
+            ) or vector(1) # end if $service.enabled
+---
+# Source: goormone/templates/rollout.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: payment-success-rate
+  labels:
+    app: payment-service
+spec:
+  args:
+    - name: service-name
+    - name: canary-hash
+  metrics:
+    - name: success-rate
+      interval: 30s
+      count: 5
+      successCondition: result[0] >= 0.95
+      failureCondition: result[0] < 0.95
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc.cluster.local:9090
+          query: >
+            (
+              sum(rate(http_requests_total{job="{{.args.service-name}}", status!~"5.."}[2m])) /
+              sum(rate(http_requests_total{job="{{.args.service-name}}"}[2m]))
+            ) or vector(1) # end if $service.enabled
+---
+# Source: goormone/templates/rollout.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: user-success-rate
+  labels:
+    app: user-service
+spec:
+  args:
+    - name: service-name
+    - name: canary-hash
+  metrics:
+    - name: success-rate
+      interval: 30s
+      count: 5
+      successCondition: result[0] >= 0.95
+      failureCondition: result[0] < 0.95
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc.cluster.local:9090
+          query: >
+            (
+              sum(rate(http_requests_total{job="{{.args.service-name}}", status!~"5.."}[2m])) /
+              sum(rate(http_requests_total{job="{{.args.service-name}}"}[2m]))
+            ) or vector(1) # end if $service.enabled # end range
+---
+# Source: goormone/templates/rollout.yaml
+# Rollout for Canary deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: ai-service-rollout
+  labels:
+    app: ai-service
+    component: msa
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title
+          servicePort: 80
+          stableService: ai-service
+          canaryService: ai-canary-service
+      analysis:
+        templates:
+          - templateName: ai-success-rate
+        startingStep: 1
+        args:
+          - name: service-name
+            value: ai-service
+
+  selector:
+    matchLabels:
+      app: ai-service
+  template:
+    metadata:
+      labels:
+        app: ai-service
+        component: msa
+    spec:
+      containers:
+        - name: ai-service
+          image: "490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service:2554cd4"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
+          resources:
+            limits:
+              cpu: 500m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 400Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3 # end if canary.enabled
+---
+# Source: goormone/templates/rollout.yaml
+# Rollout for Canary deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: auth-service-rollout
+  labels:
+    app: auth-service
+    component: msa
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title
+          servicePort: 80
+          stableService: auth-service
+          canaryService: auth-canary-service
+      analysis:
+        templates:
+          - templateName: auth-success-rate
+        startingStep: 1
+        args:
+          - name: service-name
+            value: auth-service
+
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+        component: msa
+    spec:
+      containers:
+        - name: auth-service
+          image: "490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service:9d15e96"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3 # end if canary.enabled
+---
+# Source: goormone/templates/rollout.yaml
+# Rollout for Canary deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: common-service-rollout
+  labels:
+    app: common-service
+    component: msa
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title
+          servicePort: 80
+          stableService: common-service
+          canaryService: common-canary-service
+      analysis:
+        templates:
+          - templateName: common-success-rate
+        startingStep: 1
+        args:
+          - name: service-name
+            value: common-service
+
+  selector:
+    matchLabels:
+      app: common-service
+  template:
+    metadata:
+      labels:
+        app: common-service
+        component: msa
+    spec:
+      containers:
+        - name: common-service
+          image: "490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service:bc93aed"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
+          resources:
+            limits:
+              cpu: 500m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 400Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3 # end if canary.enabled
+---
+# Source: goormone/templates/rollout.yaml
+# Rollout for Canary deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: order-service-rollout
+  labels:
+    app: order-service
+    component: msa
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title
+          servicePort: 80
+          stableService: order-service
+          canaryService: order-canary-service
+
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+        component: msa
+    spec:
+      containers:
+        - name: order-service
+          image: "490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service:3f6c7f2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
+          resources:
+            limits:
+              cpu: 500m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 400Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3 # end if canary.enabled # end if $service.enabled
+---
+# Source: goormone/templates/rollout.yaml
+# Rollout for Canary deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: payment-service-rollout
+  labels:
+    app: payment-service
+    component: msa
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title
+          servicePort: 80
+          stableService: payment-service
+          canaryService: payment-canary-service
+      analysis:
+        templates:
+          - templateName: payment-success-rate
+        startingStep: 1
+        args:
+          - name: service-name
+            value: payment-service
+
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+        component: msa
+    spec:
+      containers:
+        - name: payment-service
+          image: "490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service:c2d0cf5"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
+          resources:
+            limits:
+              cpu: 500m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 400Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3 # end if canary.enabled
+---
+# Source: goormone/templates/rollout.yaml
+# Rollout for Canary deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: store-service-rollout
+  labels:
+    app: store-service
+    component: msa
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title
+          servicePort: 80
+          stableService: store-service
+          canaryService: store-canary-service
+
+  selector:
+    matchLabels:
+      app: store-service
+  template:
+    metadata:
+      labels:
+        app: store-service
+        component: msa
+    spec:
+      containers:
+        - name: store-service
+          image: "490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service:3f6c7f2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3 # end if canary.enabled # end if $service.enabled
+---
+# Source: goormone/templates/rollout.yaml
+# Rollout for Canary deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: user-service-rollout
+  labels:
+    app: user-service
+    component: msa
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title
+          servicePort: 80
+          stableService: user-service
+          canaryService: user-canary-service
+      analysis:
+        templates:
+          - templateName: user-success-rate
+        startingStep: 1
+        args:
+          - name: service-name
+            value: user-service
+
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+        component: msa
+    spec:
+      containers:
+        - name: user-service
+          image: "490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service:bc93aed"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: msa-config
+            - secretRef:
+                name: msa-secret
+          resources:
+            limits:
+              cpu: 500m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 400Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3 # end if canary.enabled
