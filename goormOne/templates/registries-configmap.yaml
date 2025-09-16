@@ -4,7 +4,7 @@ metadata:
   name: argocd-image-updater-registries
   namespace: argocd
 data:
-  registries.yaml: |-
+  registries.conf: |-
     registries:
       - name: aws-ecr-apne2
         api_url: https://490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
