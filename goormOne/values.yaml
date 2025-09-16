@@ -90,6 +90,18 @@ services:
       port: 80
       targetPort: 8080
 
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
     resources:
       requests:
         cpu: 100m
@@ -146,6 +158,19 @@ services:
       limits:
         cpu: 1000m
         memory: 1Gi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
     ingress:
       enabled: true
       host: ""
@@ -170,6 +195,19 @@ services:
       limits:
         cpu: 500m
         memory: 800Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
     ingress:
       enabled: true
       host: ""
@@ -196,6 +234,19 @@ services:
       limits:
         cpu: 500m
         memory: 800Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
     ingress:
       enabled: true
       host: ""
@@ -222,6 +273,20 @@ services:
         limits:
           cpu: 500m
           memory: 800Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionEnabled: false  # 자동 프로모션 비활성화 (수동 승인)
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+
     ingress:
       enabled: true
       host: ""
