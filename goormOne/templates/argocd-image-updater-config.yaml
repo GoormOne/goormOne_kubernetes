@@ -6,7 +6,8 @@ metadata:
 data:
   registries.conf: |-
     registries:
-    - name: aws-ecr-apne2
-      api_url: https://490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
-      prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
-      default: true
+      - name: aws-ecr-apne2
+        api_url: https://490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+        prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+        default: true
+        credentials: ecr:aws_region=ap-northeast-2
