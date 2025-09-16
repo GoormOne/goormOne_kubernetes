@@ -261,7 +261,7 @@ services:
     replicaCount: 2
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service
-      tag: 2554cd4
+      tag: 3f6c7f2
       pullPolicy: IfNotPresent
     service:
       type: ClusterIP
