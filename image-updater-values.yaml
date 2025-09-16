@@ -1,0 +1,5 @@
+registries:
+  - name: ECR
+    api: ecr
+    prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+    region: ap-northeast-2
