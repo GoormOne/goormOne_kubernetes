@@ -64,10 +64,6 @@ spec:
             - secretRef:
                 name: {{ $.Values.global.secret.name }}
             {{- end }}
-          volumeMounts:
-            - name: registries-config
-              mountPath: /app/config/registries.yaml
-              subPath: registries.yaml
           {{- if $service.resources }}
           resources:
 {{ toYaml $service.resources | nindent 12 }}
@@ -90,10 +86,6 @@ spec:
             timeoutSeconds: 3
             failureThreshold: 3
           {{- end }}
-      volumes:
-        - name: registries-config
-          configMap:
-            name: argocd-image-updater-registries
 {{- end }} # end if canary.enabled
 
 {{- if and $service.canary $service.canary.analysis }}
