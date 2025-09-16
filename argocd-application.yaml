@@ -19,7 +19,8 @@ metadata:
     argocd-image-updater.argoproj.io/git-branch: feat/argocd
 
     # 업데이트 전략
-    argocd-image-updater.argoproj.io/update-strategy: latest
+    argocd-image-updater.argoproj.io/update-strategy: semver
+    argocd-image-updater.argoproj.io/semver-filter: ".*"
 
     # Helm value path 지정 (values.yaml 구조 기준)
     argocd-image-updater.argoproj.io/user.helm.image-name: services.user.image.repository
