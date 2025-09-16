@@ -13,12 +13,12 @@ extraEnv:
   - name: AWS_REGION
     value: ap-northeast-2
 
-extraVolumes:
-  - name: registries-config
-    configMap:
-      name: argocd-image-updater-registries
+#extraVolumes:
+#  - name: registries-config
+#    configMap:
+#      name: argocd-image-updater-registries
 
-extraVolumeMounts:
-  - name: registries-config
-    mountPath: /app/config/registries.conf
-    subPath: registries.conf
+#extraVolumeMounts:
+#  - name: registries-config
+#    mountPath: /app/config/registries.conf
+#    subPath: registries.conf
