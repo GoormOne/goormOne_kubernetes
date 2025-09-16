@@ -40,8 +40,7 @@ services:
       trafficRouting:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
-          stableService: user-service
-          canaryService: user-canary-service
+
     ingress:
       enabled: true
       host: "" # 경로 기반 라우팅, 호스트 지정 안 함
@@ -101,8 +100,7 @@ services:
       trafficRouting:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
-          stableService: order-service
-          canaryService: order-canary-service
+
     analysis:
       enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
     resources:
@@ -147,8 +145,7 @@ services:
       trafficRouting:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
-          stableService: store-service
-          canaryService: store-canary-service
+
     analysis:
       enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
     ingress:
@@ -186,8 +183,7 @@ services:
       trafficRouting:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
-          stableService: auth-service
-          canaryService: auth-canary-service
+
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
     ingress:
@@ -225,8 +221,7 @@ services:
       trafficRouting:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
-          stableService: ai-service
-          canaryService: ai-canary-service
+
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
     ingress:
@@ -266,8 +261,7 @@ services:
       trafficRouting:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
-          stableService: payment-service
-          canaryService: payment-canary-service
+
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
     ingress:
@@ -306,8 +300,7 @@ services:
       trafficRouting:
         alb:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
-          stableService: common-service
-          canaryService: common-canary-service
+
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
     ingress:
