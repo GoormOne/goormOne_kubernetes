@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: argocd-image-updater-registries
+  name: argocd-image-updater-config
   namespace: argocd
 data:
   registries.conf: |-
