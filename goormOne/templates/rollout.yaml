@@ -25,11 +25,8 @@ spec:
         alb:
           ingress: {{ $.Values.globalIngress.name }}
           servicePort: {{ $service.service.port }}
-          ingressRule:
-            host: {{ $service.ingress.host | quote }}
-            path: {{ (index $service.ingress.paths 0).path | quote }}
 
-      autoPromotionEnabled: {{ $service.canary.autoPromotionEnabled | default false }}
+      autoPromotionSeconds: {{ $service.canary.autoPromotionSeconds | default 0 }}
 
       {{- if $service.canary.analysis }}
       analysis:
