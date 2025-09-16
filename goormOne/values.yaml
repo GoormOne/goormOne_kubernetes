@@ -43,11 +43,11 @@ services:
 
     resources:
       requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
         cpu: 500m
         memory: 1Gi
-      limits:
-        cpu: 1000m
-        memory: 2Gi
     # 카나리 배포 설정
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -107,11 +107,11 @@ services:
 
     resources:
       requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
         cpu: 500m
         memory: 1Gi
-      limits:
-        cpu: 1000m
-        memory: 2Gi
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -148,11 +148,11 @@ services:
 
     resources:
       requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
         cpu: 500m
         memory: 1Gi
-      limits:
-        cpu: 1000m
-        memory: 2Gi
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -189,11 +189,11 @@ services:
 
     resources:
       requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
         cpu: 500m
         memory: 1Gi
-      limits:
-        cpu: 1000m
-        memory: 2Gi
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -229,11 +229,11 @@ services:
 
     resources:
       requests:
-        cpu: 100m
-        memory: 400Mi
+        cpu: 200m
+        memory: 512Mi
       limits:
         cpu: 500m
-        memory: 800Mi
+        memory: 1Gi
 
     canary:
       enabled: true  # 카나리 배포 활성화
@@ -270,11 +270,11 @@ services:
 
     resources:
       requests:
-        cpu: 100m
-        memory: 400Mi
+        cpu: 200m
+        memory: 512Mi
       limits:
         cpu: 500m
-        memory: 800Mi
+        memory: 1Gi
 
 
     canary:
@@ -311,11 +311,11 @@ services:
 
     resources:
       requests:
-        cpu: 100m
-        memory: 400Mi
+        cpu: 200m
+        memory: 512Mi
       limits:
         cpu: 500m
-        memory: 800Mi
+        memory: 1Gi
 
     canary:
       enabled: true  # 카나리 배포 활성화
