@@ -6,21 +6,39 @@ metadata:
   annotations:
     # 업데이트할 이미지 정의
     argocd-image-updater.argoproj.io/image-list: |
-      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service,
-      order=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service,
-      store=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service,
-      auth=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service,
-      ai=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service,
-      payment=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service,
+      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
+      order=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service
+      store=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service
+      auth=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service
+      ai=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service
+      payment=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service
       common=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service
 
     # Git write-back
     argocd-image-updater.argoproj.io/write-back-method: git
     argocd-image-updater.argoproj.io/git-branch: feat/argocd
 
-    # 업데이트 전략
-    argocd-image-updater.argoproj.io/update-strategy: semver
-    argocd-image-updater.argoproj.io/semver-filter: ".*"
+    # 각 이미지별 업데이트 전략 및 태그 허용
+    argocd-image-updater.argoproj.io/user.update-strategy: latest
+    argocd-image-updater.argoproj.io/user.allow-tags: regexp:^[0-9a-f]{7}$
+
+    argocd-image-updater.argoproj.io/order.update-strategy: latest
+    argocd-image-updater.argoproj.io/order.allow-tags: regexp:^[0-9a-f]{7}$
+
+    argocd-image-updater.argoproj.io/store.update-strategy: latest
+    argocd-image-updater.argoproj.io/store.allow-tags: regexp:^[0-9a-f]{7}$
+
+    argocd-image-updater.argoproj.io/auth.update-strategy: latest
+    argocd-image-updater.argoproj.io/auth.allow-tags: regexp:^[0-9a-f]{7}$
+
+    argocd-image-updater.argoproj.io/ai.update-strategy: latest
+    argocd-image-updater.argoproj.io/ai.allow-tags: regexp:^[0-9a-f]{7}$
+
+    argocd-image-updater.argoproj.io/payment.update-strategy: latest
+    argocd-image-updater.argoproj.io/payment.allow-tags: regexp:^[0-9a-f]{7}$
+
+    argocd-image-updater.argoproj.io/common.update-strategy: latest
+    argocd-image-updater.argoproj.io/common.allow-tags: regexp:^[0-9a-f]{7}$
 
     # Helm value path 지정 (values.yaml 구조 기준)
     argocd-image-updater.argoproj.io/user.helm.image-name: services.user.image.repository
@@ -43,6 +61,7 @@ metadata:
 
     argocd-image-updater.argoproj.io/common.helm.image-name: services.common.image.repository
     argocd-image-updater.argoproj.io/common.helm.image-tag: services.common.image.tag
+
 spec:
   project: default
   source:
