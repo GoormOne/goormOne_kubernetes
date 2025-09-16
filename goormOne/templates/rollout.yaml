@@ -20,13 +20,14 @@ spec:
         - setWeight: {{ $service.canary.middleWeight | default 50 }}
         - pause: { duration: {{ $service.canary.pauseDuration | default "30s" }} }
         - setWeight: 100
+      autoPromotionSeconds: {{ $service.canary.autoPromotionSeconds | default 0 }}
 
       trafficRouting:
         alb:
           ingress: {{ $.Values.globalIngress.name }}
           servicePort: {{ $service.service.port }}
 
-      autoPromotionSeconds: {{ $service.canary.autoPromotionSeconds | default 0 }}
+
 
       {{- if $service.canary.analysis }}
       analysis:
