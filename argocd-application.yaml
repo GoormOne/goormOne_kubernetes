@@ -6,7 +6,7 @@ metadata:
   annotations:
     # ECR 이미지 감시
     argocd-image-updater.argoproj.io/image-list: >
-      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service:dev,
+      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service,
       order=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service,
       store=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service,
       auth=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service,
