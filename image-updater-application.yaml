@@ -22,13 +22,7 @@ spec:
           annotations:
             eks.amazonaws.com/role-arn: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
 
-        config:
-          registries: |
-            registries:
-              - name: ecr
-                api_url: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
-                prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
-                credentials: ecr:aws_region=ap-northeast-2
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
