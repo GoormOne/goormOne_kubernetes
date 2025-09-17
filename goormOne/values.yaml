@@ -77,7 +77,7 @@ services:
 
     ingress:
       enabled: true
-      host: "" # 경로 기반 라우팅, 호스트 지정 안 함
+      host: "howdy1227.com"
       paths:
         - path: /user
           pathType: ImplementationSpecific
@@ -142,7 +142,7 @@ services:
 
     ingress:
       enabled: true
-      host: ""
+      host: "howdy1227.com"
       paths:
         - path: /order
           pathType: ImplementationSpecific
@@ -186,7 +186,7 @@ services:
 
     ingress:
       enabled: true
-      host: ""
+      host: "howdy1227.com"
       paths:
         - path: /store
           pathType: ImplementationSpecific
@@ -228,7 +228,7 @@ services:
 
     ingress:
       enabled: true
-      host: ""
+      host: "howdy1227.com"
       paths:
         - path: /auth
           pathType: ImplementationSpecific
@@ -270,7 +270,7 @@ services:
 
     ingress:
       enabled: true
-      host: ""
+      host: "howdy1227.com"
       paths:
         - path: /ai
           pathType: ImplementationSpecific
@@ -314,7 +314,7 @@ services:
 
     ingress:
       enabled: true
-      host: ""
+      host: "howdy1227.com"
       paths:
         - path: /payment
           pathType: ImplementationSpecific
@@ -356,7 +356,7 @@ services:
         enabled: true  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
     ingress:
       enabled: true
-      host: ""
+      host: "howdy1227.com"
       paths:
         - path: /common
           pathType: ImplementationSpecific

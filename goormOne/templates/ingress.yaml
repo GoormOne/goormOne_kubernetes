@@ -10,6 +10,8 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:490913547024:certificate/af0461ca-6cd9-44a4-82f9-2b54fea77bed
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
     ingress.kubernetes.io/group.name: {{ include "goormOne.fullname" . }}-group
     {{- with .Values.globalIngress.annotations }}
     {{- toYaml . | nindent 4 }}
