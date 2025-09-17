@@ -22,6 +22,8 @@ spec:
           annotations:
             eks.amazonaws.com/role-arn: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
 
+        config:
+          registriesConfPath: /app/config/registries.conf
 
   destination:
     server: https://kubernetes.default.svc
