@@ -18,6 +18,7 @@ spec:
             eks.amazonaws.com/role-arn: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
 
         config:
+          existingConfig: argocd-image-updater-config
           registriesConfPath: /app/config/registries.conf
 
   destination:
