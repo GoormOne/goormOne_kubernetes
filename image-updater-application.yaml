@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argocd-image-updater
-    targetRevision: 0.12.0 # 예시, 실제 최신 버전 확인
+    targetRevision: 0.12.0
     helm:
       valueFiles: []
       values: |-
@@ -22,17 +22,13 @@ spec:
           annotations:
             eks.amazonaws.com/role-arn: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
 
-
-        extraVolumes:
-            - name: registries-config
-              configMap:
-                name: argocd-image-updater-registries
-        extraVolumeMounts:
-            - name: registries-config
-              mountPath: /app/config/registries.yaml
-              subPath: registries.yaml
         config:
-          registriesConfPath: /app/config/registries.yaml
+          registries: |
+            registries:
+              - name: ecr
+                api_url: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+                prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+                credentials: ecr:aws_region=ap-northeast-2
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
