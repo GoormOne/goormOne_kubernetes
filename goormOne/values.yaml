@@ -62,10 +62,10 @@ services:
         memory: 512Mi
     # 카나리 배포 설정
     canary:
-      enabled: true  # 카나리 배포 활성화
-      initialWeight: 10  # 초기 트래픽 비율 (10%)
-      middleWeight: 50   # 중간 트래픽 비율 (50%)
-      pauseDuration: "30s"  # 각 단계별 대기 시간
+      enabled: true
+      initialWeight: 10
+      middleWeight: 50
+      pauseDuration: "30s"
       autoPromotionSeconds: 30
 
       trafficRouting:
@@ -240,7 +240,50 @@ services:
       enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service
-      tag: 2554cd4
+      tag: 2823e38
+      pullPolicy: Always
+    service:
+      type: ClusterIP
+      port: 80
+      targetPort: 8000
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /ai
+          pathType: ImplementationSpecific
+
+  ai-model:
+    enabled: true #이 서비스를 배포할 것인가?
+    replicaCount: 1
+    probes:
+      enabled: false
+    image:
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-model-service
+      tag: 2823e38
       pullPolicy: Always
     service:
       type: ClusterIP
