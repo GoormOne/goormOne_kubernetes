@@ -11,6 +11,7 @@ metadata:
       store=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service,
       auth=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service,
       ai=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service,
+      ai-model=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-model-service,
       payment=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service,
       common=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service
     argocd-image-updater.argoproj.io/git-commit-template: "Update images: {{.Images}}"

@@ -23,10 +23,10 @@ spec:
         - pause: { duration: {{ $service.canary.pauseDuration | default "30s" }} }
         - setWeight: 100
       autoPromotionSeconds: {{ $service.canary.autoPromotionSeconds | default 0 }}
+      {{- if $service.canary.trafficRouting }}
       trafficRouting:
-        alb:
-          ingress: {{ $.Values.globalIngress.name }}
-          servicePort: {{ $service.service.port }}
+        {{- toYaml $service.canary.trafficRouting | nindent 6 }}
+      {{- end }}
 
       {{- if $service.canary.analysis }}
       analysis:

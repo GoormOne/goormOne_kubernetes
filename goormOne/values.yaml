@@ -305,19 +305,15 @@ services:
       pauseDuration: "30s"  # 각 단계별 대기 시간
       autoPromotionSeconds: 30
 
-      trafficRouting:
-        alb:
-          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+#      trafficRouting:
+#        alb:
+#          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
 
       analysis:
         enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
 
     ingress:
-      enabled: true
-      host: "howdy1227.com"
-      paths:
-        - path: /ai
-          pathType: ImplementationSpecific
+      enabled: false
 
   payment:
     enabled: true #이 서비스를 배포할 것인가?
