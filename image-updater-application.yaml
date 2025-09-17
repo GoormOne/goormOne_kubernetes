@@ -17,7 +17,8 @@ spec:
           annotations:
             eks.amazonaws.com/role-arn: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
         config:
-          existingConfig: image-updater-registries
+          registriesConfPath: /app/config/registries.conf
+          existingConfig: argocd-image-updater-registries
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
