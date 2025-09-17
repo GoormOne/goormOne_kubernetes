@@ -240,7 +240,7 @@ services:
       enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service
-      tag: '2823e38'
+      tag: 0ff824e
       pullPolicy: Always
     service:
       type: ClusterIP
@@ -283,7 +283,7 @@ services:
       enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-model-service
-      tag: '2823e38'
+      tag: 0ff824e
       pullPolicy: Always
     service:
       type: ClusterIP
