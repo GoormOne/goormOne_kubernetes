@@ -240,7 +240,7 @@ services:
       enabled: false
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service
-      tag: 2823e38
+      tag: '2823e38'
       pullPolicy: Always
     service:
       type: ClusterIP
