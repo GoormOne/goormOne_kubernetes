@@ -4,11 +4,10 @@ metadata:
   name: argocd-image-updater-config
   namespace: argocd
 data:
-  kube.events: "false"
   log.level: "info"
+  kube.events: "false"
   registries.conf: |
-    registries:
-      - name: ecr
-        api_url: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
-        prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
-        credentials: ecr:aws_region=ap-northeast-2
+    - name: ecr
+      api_url: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+      prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+      credentials: ecr:aws_region=ap-northeast-2
