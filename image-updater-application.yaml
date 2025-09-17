@@ -3,10 +3,6 @@ kind: Application
 metadata:
   name: argocd-image-updater
   namespace: argocd
-  annotations:
-    argocd-image-updater.argoproj.io/write-back-target: helm
-    argocd-image-updater.argoproj.io/values-file: values-image-updater.yaml
-
 spec:
   project: default
   source:
@@ -14,7 +10,6 @@ spec:
     chart: argocd-image-updater
     targetRevision: 0.12.0
     helm:
-      valueFiles: []
       values: |-
         serviceAccount:
           create: true
@@ -22,13 +17,6 @@ spec:
           annotations:
             eks.amazonaws.com/role-arn: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
 
-        config:
-          registriesConfPath: /app/config/registries.conf
-
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+        
+        extraArgs:
+          - --registries-conf=/app/config/registries.conf
