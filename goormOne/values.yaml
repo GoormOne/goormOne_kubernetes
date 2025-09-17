@@ -74,7 +74,7 @@ services:
 
 
       analysis:
-        enabled: true  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+        enabled: false
 
     ingress:
       enabled: true
@@ -182,7 +182,7 @@ services:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
 
       analysis:
-        enabled: true  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+        enabled: false
 
 
     ingress:
@@ -393,7 +393,7 @@ services:
           ingress: title # globalIngress에서 정의한 단일 Ingress 이름
 
       analysis:
-        enabled: true  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+        enabled: false
     ingress:
       enabled: true
       host: "howdy1227.com"
