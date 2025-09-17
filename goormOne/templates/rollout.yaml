@@ -12,6 +12,7 @@ metadata:
     component: msa
 spec:
   replicas: {{ $service.replicaCount | default 1 }}
+  revisionHistoryLimit: 2
   strategy:
     canary:
       stableService: {{ $serviceName }}-service
