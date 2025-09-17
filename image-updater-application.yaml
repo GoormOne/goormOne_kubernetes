@@ -36,3 +36,4 @@ spec:
     automated:
       prune: true
       selfHeal: true
+      pruneLast: true
