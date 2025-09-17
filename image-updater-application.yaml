@@ -17,6 +17,14 @@ spec:
           annotations:
             eks.amazonaws.com/role-arn: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
 
-        
-        extraArgs:
-          - --registries-conf=/app/config/registries.conf
+        config:
+          registriesConfPath: /app/config/registries.conf
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
