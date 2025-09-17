@@ -52,7 +52,8 @@ spec:
     spec:
       containers:
         - name: {{ $serviceName }}-service
-          image: "{{ $service.image.repository }}:{{ $service.image.tag }}"
+{{/*          image: "{{ $service.image.repository }}:{{ $service.image.tag }}"*/}}
+          image: "{{ $service.image.repository }}:{{ $service.image.tag }}{{ if $service.image.digest }}@{{ $service.image.digest }}{{ end }}"
           imagePullPolicy: {{ $service.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - name: http

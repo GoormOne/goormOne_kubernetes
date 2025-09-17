@@ -6,7 +6,7 @@ metadata:
   annotations:
     # ECR 이미지 감시
     argocd-image-updater.argoproj.io/image-list: >
-      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service,
+      user=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service:dev,
       order=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service,
       store=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service,
       auth=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service,
@@ -20,20 +20,20 @@ metadata:
 
 
     # 각 이미지별 업데이트 전략 및 태그 허용
-    argocd-image-updater.argoproj.io/user.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/user.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/order.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/order.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/store.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/store.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/auth.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/auth.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/ai.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/ai.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/payment.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/payment.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/common.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/common.update-strategy: newest-build
+    #argocd-image-updater.argoproj.io/user.allow-tags: regexp:^[0-9a-f]{7}$
+    argocd-image-updater.argoproj.io/user.update-strategy: digest
+    #argocd-image-updater.argoproj.io/order.allow-tags: regexp:^[0-9a-f]{7}$
+    argocd-image-updater.argoproj.io/order.update-strategy: digest
+    #argocd-image-updater.argoproj.io/store.allow-tags: regexp:^[0-9a-f]{7}$
+    argocd-image-updater.argoproj.io/store.update-strategy: digest
+    #argocd-image-updater.argoproj.io/auth.allow-tags: regexp:^[0-9a-f]{7}$
+    argocd-image-updater.argoproj.io/auth.update-strategy: digest
+    #argocd-image-updater.argoproj.io/ai.allow-tags: regexp:^[0-9a-f]{7}$
+    argocd-image-updater.argoproj.io/ai.update-strategy: digest
+    #argocd-image-updater.argoproj.io/payment.allow-tags: regexp:^[0-9a-f]{7}$
+    argocd-image-updater.argoproj.io/payment.update-strategy: digest
+    #argocd-image-updater.argoproj.io/common.allow-tags: regexp:^[0-9a-f]{7}$
+    argocd-image-updater.argoproj.io/common.update-strategy: digest
 
 
     # Helm value path 지정 (values.yaml 구조 기준)

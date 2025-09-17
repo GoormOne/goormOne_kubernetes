@@ -45,7 +45,8 @@ services:
     replicaCount : 1
     image:
       repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
-      tag: fc5b1db
+      tag: dev
+      digest: sha256:5509f712678c9d286b40e88bf072e4431d7f14a67b96554e0dd75eb24890a763
       pullPolicy: Always
     service:
       type: ClusterIP
