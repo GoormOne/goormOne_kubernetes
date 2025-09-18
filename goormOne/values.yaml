@@ -3,14 +3,51 @@ global:
     name: msa-config
   secret:
     name: msa-secret
+  aws:
+    region: ap-northeast-2
+    assumeRole: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
+
+# Argo CD Image Updater 전용 환경변수
+#imageUpdater:
+#  extraEnv:
+#    - name: AWS_ROLE_ARN
+#      value: arn:aws:iam::490913547024:role/eksctl-Groom-EKS-Cluster-addon-iamserviceacco-Role1-VEcAya4s4CwL
+#    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+#      value: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+#    - name: AWS_REGION
+#      value: ap-northeast-2
+#  extraVolumes:
+#    - name: registries-config
+#      configMap:
+#        name: argocd-image-updater-registries
+#
+#  extraVolumeMounts:
+#    - name: registries-config
+#      mountPath: /app/config/registries.yaml
+#      subPath: registries.yaml
+globalIngress:
+  enabled: true
+  name: title # Ingress 이름
+  className: alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/5a0cf7788c5e52f7
+    # alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e # 필요시 주석 해제
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]' # 리스너 포트
+  # tls: # HTTPS를 사용하려면 여기에 TLS 설정 추가
 services:
   user:
     enabled : true #이 서비스를 배포할 것인가?
-    replicaCount : 2
+    probes:
+      enabled: false
+    replicaCount : 1
     image:
-      repository: bleuxsy/user-service
-      tag: latest
-      pullPolicy : IfNotPresent
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
+      tag: 046b684
+      #digest: sha256:5509f712678c9d286b40e88bf072e4431d7f14a67b96554e0dd75eb24890a763
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -21,16 +58,62 @@ services:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
+    # 카나리 배포 설정
+    canary:
+      enabled: true
+      initialWeight: 10
+      middleWeight: 50
+      pauseDuration: "30s"
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+
+      analysis:
+        enabled: false
+
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /user
+          pathType: ImplementationSpecific
+
+#    livenessProbe:
+#      httpGet:
+#        path: /actuator/health
+#        port: 8080
+#      initialDelaySeconds: 60
+#      periodSeconds: 30
+#      timeoutSeconds: 10
+#      failureThreshold: 3
+#
+#    readinessProbe:
+#      httpGet:
+#        path: /actuator/health/readiness
+#        port: 8080
+#      initialDelaySeconds: 30
+#      periodSeconds: 10
+#      timeoutSeconds: 5
+#      failureThreshold: 3
+
+
+
+
 
   order:
     enabled: true #이 서비스를 배포할 것인가?
-    replicaCount: 2
+    replicaCount: 1
+    probes:
+      enabled: false
     image:
-      repository: bleuxsy/order-service
-      tag: latest
-      pullPolicy: IfNotPresent
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/order-service
+      tag: 3f6c7f2
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -41,14 +124,38 @@ services:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /order
+          pathType: ImplementationSpecific
+
   store:
     enabled : true #이 서비스를 배포할 것인가?
-    replicaCount : 2
+    replicaCount : 1
+    probes:
+      enabled: false
     image:
-      repository: bleuxsy/store-service
-      tag: latest
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service
+      tag: 3f6c7f2
       pullPolicy : IfNotPresent
     service:
       type: ClusterIP
@@ -60,52 +167,163 @@ services:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false
+
+
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /store
+          pathType: ImplementationSpecific
   auth:
     enabled: true #이 서비스를 배포할 것인가?
-    replicaCount: 2
+    replicaCount: 1
+    probes:
+      enabled: false
     image:
-      repository: bleuxsy/auth-service
-      tag: latest
-      pullPolicy: IfNotPresent
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/auth-service
+      tag: 35e0499
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
       targetPort: 8080
+
     resources:
       requests:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /auth
+          pathType: ImplementationSpecific
   ai:
     enabled: true #이 서비스를 배포할 것인가?
-    replicaCount: 2
+    replicaCount: 1
+    probes:
+      enabled: false
     image:
-      repository: bleuxsy/ai-service
-      tag: latest
-      pullPolicy: IfNotPresent
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-service
+      tag: 0ff824e
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
       targetPort: 8000
+
     resources:
       requests:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /ai
+          pathType: ImplementationSpecific
+
+  ai-model:
+    enabled: true #이 서비스를 배포할 것인가?
+    replicaCount: 1
+    probes:
+      enabled: false
+    image:
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/ai-model-service
+      tag: 0ff824e
+      pullPolicy: Always
+    service:
+      type: ClusterIP
+      port: 80
+      targetPort: 8000
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+#      trafficRouting:
+#        alb:
+#          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+
+    ingress:
+      enabled: false
 
   payment:
     enabled: true #이 서비스를 배포할 것인가?
-    replicaCount: 2
+    probes:
+      enabled: false
+    replicaCount: 1
     image:
-      repository: bleuxsy/payment-service
-      tag: latest
-      pullPolicy: IfNotPresent
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service
+      tag: 3f6c7f2
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -116,15 +334,40 @@ services:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
+
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false  # 메트릭 기반 분석 비활성화 (나중에 Prometheus 설정 후 활성화)
+
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /payment
+          pathType: ImplementationSpecific
   common:
+
     enabled: true #이 서비스를 배포할 것인가?
-    replicaCount: 2
+    probes:
+      enabled: false
+    replicaCount: 1
     image:
-      repository: bleuxsy/common-service
-      tag: latest
-      pullPolicy: IfNotPresent
+      repository: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/common-service
+      tag: bc93aed
+      pullPolicy: Always
     service:
       type: ClusterIP
       port: 80
@@ -135,8 +378,31 @@ services:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
+
+    canary:
+      enabled: true  # 카나리 배포 활성화
+      initialWeight: 10  # 초기 트래픽 비율 (10%)
+      middleWeight: 50   # 중간 트래픽 비율 (50%)
+      pauseDuration: "30s"  # 각 단계별 대기 시간
+      autoPromotionSeconds: 30
+
+      trafficRouting:
+        alb:
+          ingress: title # globalIngress에서 정의한 단일 Ingress 이름
+
+      analysis:
+        enabled: false
+    ingress:
+      enabled: true
+      host: "howdy1227.com"
+      paths:
+        - path: /common
+          pathType: ImplementationSpecific
+
+
+
 
 # ConfigMap configuration
 configMap:
@@ -156,84 +422,5 @@ secret:
     OPENAI_API_KEY: "YOUR_OPENAI_API_KEY"
     MONGODB_URI: "YOUR_MONGODB_URI"
     MONGODB_NAME: "YOUR_MONGODB_NAME"
-
-# Legacy single service configuration (kept for backward compatibility)
-replicaCount: 1
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  tag: ""
-
-# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
-# This is to override the chart name.
-nameOverride: "goormone"
-fullnameOverride: "goormone"
-
-# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-# This is for setting Kubernetes Annotations to a Pod.
-podAnnotations: {}
-# This is for setting Kubernetes Labels to a Pod.
-podLabels: {}
-
-podSecurityContext: {}
-securityContext: {}
-
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
-service:
-  type: ClusterIP
-  port: 80
-
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-
-resources: {}
-
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
-
-# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-
-nodeSelector: {}
-tolerations: []
-affinity: {}
-
 
 

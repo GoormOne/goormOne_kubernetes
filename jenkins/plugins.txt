@@ -1,0 +1,34 @@
+# 필수 플러그인
+ant:475.vf34069fef73c
+build-timeout:1.31
+credentials-binding:681.vf91669a_32e45
+email-ext:2.107
+git:5.2.1
+github:1.38.0
+gradle:2.12
+pipeline-stage-view:2.34
+ssh-slaves:2.973.v0ee9c83a_3ab_4
+timestamper:1.27
+workflow-aggregator:596.v8c21c963d92d
+ws-cleanup:0.46
+
+# Docker 관련 플러그인
+docker-plugin:1.5.1
+docker-workflow:580.vc0c340686b_54
+
+# AWS 관련 플러그인  
+aws-credentials:218.v1b_e9466ec5da_
+pipeline-aws:1.49
+
+# GitHub 연동
+github-branch-source:1763.v969d9eb_c728b_
+pipeline-github-lib:61.v629f2f5b_3058
+
+# 기타 유용한 플러그인
+blueocean:1.27.9
+dashboard-view:2.506.vf2f33ecf4f4c
+embeddable-build-status:2.0.4.1
+junit:1259.v65ffcef24a_b_4
+matrix-auth:3.2.2
+pam-auth:1.11
+ldap:682.v5a_df1077c64c

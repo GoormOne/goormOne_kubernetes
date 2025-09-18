@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+    component: msa
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: "user-service=490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service"
+    argocd-image-updater.argoproj.io/ecr-secret-name: ecr-creds
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      # 카나리 배포 단계 설정
+      steps:
+      - setWeight: 20    # 20% 트래픽으로 시작
+      - pause: { duration: "30s" }  # 30초 대기
+      - setWeight: 50    # 50% 트래픽으로 증가
+      - pause: { duration: "30s" }  # 30초 대기  
+      - setWeight: 100   # 100% 트래픽으로 완전 배포
+      
+      # 단순한 카나리 배포 (트래픽 라우팅 없이)
+      # 수동 승인 필요
+      canaryMetadata:
+        labels:
+          role: canary
+
+  selector:
+    matchLabels:
+      app: user-service
+  
+  template:
+    metadata:
+      labels:
+        app: user-service
+        component: msa
+    spec:
+      containers:
+        - name: user-service
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/user-service:bc93aed
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+          
+          # 리소스 제한 설정
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          
+          # 헬스체크 설정
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-image-updater-registries
+  namespace: argocd
+data:
+  registries.conf: |
+    registries:
+      - name: ecr
+        api_url: https://490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+        prefix: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com
+        creds: ext:/usr/local/bin/argocd-image-updater credentials aws --region ap-northeast-2

@@ -4,59 +4,95 @@ metadata:
   name: goormone-ingress
   namespace: goormone-msa
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: alb
+#    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    # Argo Rollouts 카나리 배포를 위한 어노테이션
+    alb.ingress.kubernetes.io/actions.weighted-routing: |
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "user-service",
+              "servicePort": "8080",
+              "weight": 100
+            }
+          ]
+        }
+      }
+
+
 spec:
-  ingressClassName: nginx
+  ingressClassName: alb
   rules:
     - http:
+
         paths:
+
           - path: /auth
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: auth-service
                 port:
-                  number: 80
+
+                  name: http
+
           - path: /common
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: common-service
                 port:
-                  number: 80
+
+                  name: http
+
           - path: /user
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: user-service
                 port:
-                  number: 80
+
+                  name: http
+
           - path: /store
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: store-service
                 port:
-                  number: 80
+
+                  name: http
+
           - path: /payment
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: payment-service
                 port:
-                  number: 80
+
+                  name: http
+
           - path: /ai
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: ai-service
                 port:
-                  number: 80
+
+                  name: http
+
 
           - path: /order
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: order-service
                 port:
-                  number: 80
+
+                  name: http
+
+

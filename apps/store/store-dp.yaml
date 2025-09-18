@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store-service
+#  namespace: goormone-msa
+  labels:
+    app: store-service
+    component: msa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: store-service
+  template:
+    metadata:
+      labels:
+        app: store-service
+        component: msa
+    spec:
+      # eks 에서만
+      #      nodeSelector:
+      #        node-type : app
+      containers:
+        - name: store-service
+          image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/store-service:3f6c7f2
+          #image: bleuxsy/store-service:latest
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+
+
+          #          envFrom:
+          #            - configMapRef:
+          #                name: msa-config
+          #            - secretRef:
+          #                name: msa-secret
+#          resources:
+#            requests:
+#              cpu: 500m
+#              memory: 512Mi
+#            limits:
+#              cpu: 1000m
+#              memory: 1Gi
+#          livenessProbe:
+#            httpGet:
+#              path: /actuator/health/liveness
+#              port: 8080
+#            initialDelaySeconds: 60
+#            periodSeconds: 30
+#          readinessProbe:
+#            httpGet:
+#              path: /actuator/health/readiness
+#              port: 8080
+#            initialDelaySeconds: 30
+#            periodSeconds: 10

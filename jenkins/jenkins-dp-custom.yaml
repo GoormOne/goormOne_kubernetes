@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins
+      securityContext:
+        runAsUser: 0  # Docker 사용을 위해 root로 변경
+        fsGroup: 1000
+      containers:
+        - name: jenkins
+          # 🔥 커스텀 이미지 사용 - 로컬 빌드한 경우
+          image: jenkins-custom:latest
+          # 🔥 ECR에 푸시한 경우 (아래 주석 해제)
+          # image: 490913547024.dkr.ecr.ap-northeast-2.amazonaws.com/jenkins-custom:latest
+          imagePullPolicy: Always  # 항상 최신 이미지 가져오기
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 50000
+              name: agent
+          env:
+            - name: JAVA_OPTS
+              value: "-Djenkins.install.runSetupWizard=false"
+            - name: JENKINS_OPTS
+              value: "--prefix=/jenkins"
+            - name: DOCKER_HOST
+              value: "unix:///var/run/docker.sock"
+          volumeMounts:
+            - name: jenkins-data
+              mountPath: /var/jenkins_home
+            # Docker-in-Docker를 위한 소켓 마운트
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"  # Docker 사용으로 메모리 증가
+              cpu: "2000m"
+          readinessProbe:
+            httpGet:
+              path: /jenkins/login
+              port: 8080
+            initialDelaySeconds: 120  # 커스텀 이미지 로딩 시간 증가
+            periodSeconds: 10
+            timeoutSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /jenkins/login
+              port: 8080
+            initialDelaySeconds: 180  # 커스텀 이미지 로딩 시간 증가
+            periodSeconds: 20
+            timeoutSeconds: 10
+      volumes:
+        - name: jenkins-data
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
+        # Docker-in-Docker를 위한 호스트 소켓 마운트
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket

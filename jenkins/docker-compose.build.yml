@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  jenkins-custom:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
+    image: jenkins-custom:latest
+    container_name: jenkins-custom-build
+    # 빌드 테스트용 (선택사항)
+    # ports:
+    #   - "8080:8080"
+    # volumes:
+    #   - jenkins_data:/var/jenkins_home
+
+# 로컬 테스트용 볼륨 (선택사항)
+# volumes:
+#   jenkins_data:
+#     driver: local
