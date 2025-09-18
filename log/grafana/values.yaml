@@ -1,0 +1,23 @@
+# values.yaml 예시
+
+service:
+  type: ClusterIP # 외부 노출 없이 클러스터 내부에서만 접근 가능
+  port: 80 # 인그레스가 바라볼 서비스 포트
+  targetPort: 3000 # Grafana 컨테이너의 포트
+sidecar:
+  datasources:
+    enabled: true
+
+additionalDataSources:
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki-stack.logging.svc.cluster.local:3100
+    isDefault: true
+    jsonData:
+      skipCheck: true
+env:
+  GF_SERVER_ROOT_URL: "https://howdy1227.com/grafana/"
+  GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+
+adminPassword: "1234"

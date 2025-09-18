@@ -17,9 +17,8 @@ config:
     [INPUT]
         Name              tail
         Tag               kube.*
-        # 모든 컨테이너의 로그 파일을 타겟으로 합니다.
         Path              /var/log/containers/*.log
-        Parser            docker
+        Parser            docker   
         DB                /var/log/flb_kube.db
         Mem_Buf_Limit     5MB
 
@@ -36,22 +35,22 @@ config:
         K8S-Logging.Parser  On
         K8S-Logging.Exclude Off
 
-    # (★★★ 추가됨) 'component: msa' 레이블을 가진 파드의 로그만 선택하기 위한 필터
+    # 'component: msa' 레이블을 가진 파드의 로그만 선택하기 위한 필터
     [FILTER]
         Name                rewrite_tag
         Match               kube.*
         # kubernetes.labels.component가 'msa'인 로그에 'msa.logs' 태그를 붙입니다.
-        Rule                $kubernetes['labels']['component'] ^msa$ msa.logs true
+        Rule                 $kubernetes['labels']['component'] ^msa$ msa.${kubernetes['labels']['app']} false
         Emitter_Name        re_emitted
 
   # =======================================================
-  # Output 섹션: 가공된 로그를 어디로 보낼지 정의 (가장 중요!)
+  # Output 섹션: 가공된 로그를 어디로 보낼지 4정의 (가장 중요!)
   # =======================================================
   outputs: |
     [OUTPUT]
         Name            kafka
-        Match           msa.logs
-        Brokers         b-1.groommskcluster.107idq.c3.kafka.ap-northeast-2.amazonaws.com:9094,b-2.groommskcluster.107idq.c3.kafka.ap-northeast-2.amazonaws.com:9094
+        Match           *
+        Brokers         b-1.groommskcluster.3yud5y.c3.kafka.ap-northeast-2.amazonaws.com:9094,b-2.groommskcluster.3yud5y.c3.kafka.ap-northeast-2.amazonaws.com:9094
         # !!! 중요: 로그를 보낼 Kafka 토픽 이름으로 변경하세요.
         Topics          eks-app-logs
         # MSK는 TLS 통신을 사용하므로 SSL 프로토콜을 지정합니다.

@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # Ingress의 이름과 네임스페이스를 지정합니다.
+  name: grafana-ingress
+  namespace: logging # Grafana가 있는
+  annotations:
+    # 기존 Ingress와 동일하게 AWS Load Balancer Controller를 사용하도록 지정
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/group.name: my-msa-group
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/healthcheck-path: /api/health
+
+
+
+
+
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /grafana/
+            pathType: Prefix
+            backend:
+              service:
+                # 'monitoring' 네임스페이스에 있는 Grafana 서비스를 지정
+                name: grafana
+                port:
+                  number: 80
+

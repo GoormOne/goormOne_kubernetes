@@ -7,6 +7,7 @@ metadata:
 #    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/group.name: my-msa-group
     # Argo Rollouts 카나리 배포를 위한 어노테이션
     alb.ingress.kubernetes.io/actions.weighted-routing: |
       {
@@ -31,50 +32,50 @@ spec:
         paths:
 
           - path: /auth
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: auth-service
                 port:
                   name: http
           - path: /common
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: common-service
                 port:
                   name: http
-          - path: /user
-            pathType: ImplementationSpecific
+          - path: /users
+            pathType: Prefix
             backend:
               service:
                 name: user-service
                 port:
                   name: http
-          - path: /store
-            pathType: ImplementationSpecific
+          - path: /stores
+            pathType: Prefix
             backend:
               service:
                 name: store-service
                 port:
                   name: http
-          - path: /payment
-            pathType: ImplementationSpecific
+          - path: /payments
+            pathType: Prefix
             backend:
               service:
                 name: payment-service
                 port:
                   name: http
           - path: /ai
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: ai-service
                 port:
                   name: http
 
-          - path: /order
-            pathType: ImplementationSpecific
+          - path: /orders
+            pathType: Prefix
             backend:
               service:
                 name: order-service

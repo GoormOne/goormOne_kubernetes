@@ -1,0 +1,11 @@
+prometheus:
+  prometheusSpec:
+    # Prometheus 메트릭 데이터를 영구적으로 저장
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: "gp2" # 이전에 확인한 스토리지 클래스 사용
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi # 운영 환경을 고려하여 넉넉하게 설정

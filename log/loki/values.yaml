@@ -1,0 +1,72 @@
+# Loki 기본 설정
+loki:
+  enabled: true
+  image:
+    repository: grafana/loki
+    tag: 2.9.3
+  pullPolicy: IfNotPresent
+  pullSecrets: []  #
+
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: "gp2"
+
+
+
+  config:
+    table_manager:
+      retention_deletes_enabled: true
+      retention_period: 168h # 7일
+    server:
+      # gRPC로 받을 수 있는 최대 메시지 크기를 늘립니다 (예: 16MB)
+      grpc_server_max_recv_msg_size: 16777216
+      # gRPC로 보낼 수 있는 최대 메시지 크기를 늘립니다 (예: 16MB)
+      grpc_server_max_send_msg_size: 16777216
+
+    # ====> HTTP 429 에러 해결을 위한 올바른 위치 <====
+    limits_config:
+      # 초당 수집량 제한을 늘립니다 (기본 4MB/sec -> 예: 10MB/sec)
+      ingestion_rate_mb: 10
+      # 순간적인 트래픽 폭증(burst)을 허용하는 크기를 늘립니다 (기본 6MB -> 예: 20MB)
+      ingestion_burst_size_mb: 20
+
+ # Grafana는 이미 배포되어 있으므로 false
+promtail:
+  enabled: true
+  serviceAccount:
+    create: false
+    name: promtail-sa-v2
+
+  deployment:
+    enabled: true
+  daemonset:
+    enabled: false
+
+  config:
+    clients:
+      - url: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:3100/loki/api/v1/push
+    scrape_configs:  |
+      - job_name: eks-msk-logs
+        kafka:
+          brokers:
+            - "b-2.groommskcluster.3yud5y.c3.kafka.ap-northeast-2.amazonaws.com:9094"
+            - "b-1.groommskcluster.3yud5y.c3.kafka.ap-northeast-2.amazonaws.com:9094"
+          topics:
+            - "eks-app-logs"
+          group_id: "loki-promtail-consumer"
+          security_protocol: "SSL"
+        pipeline_stages:
+          - json:
+              expressions:
+                log: log
+                stream: stream
+                kubernetes: kubernetes
+          - labels:
+              app: kubernetes.labels.app
+
+
+
+
+grafana:
+  enabled: false

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fluent-bit-kafka-consumer
+  namespace: logging # 위 ConfigMap과 동일한 네임스페이스
+  labels:
+    app: fluent-bit-kafka-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fluent-bit-kafka-consumer
+  template:
+    metadata:
+      labels:
+        app: fluent-bit-kafka-consumer
+    spec:
+      serviceAccountName: promtail-sa-v2
+      containers:
+        - name: fluent-bit
+          image: fluent/fluent-bit:2.2.2 # Fluent Bit 이미지
+          volumeMounts:
+            - name: config
+              mountPath: /fluent-bit/etc/
+      volumes:
+        - name: config
+          configMap:
+            name: fluent-bit-consumer-config
+
+
