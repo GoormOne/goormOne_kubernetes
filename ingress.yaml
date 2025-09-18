@@ -1,7 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: title
+  name: goormone-ingress
+  namespace: goormone-msa
   annotations:
     kubernetes.io/ingress.class: alb
 #    alb.ingress.kubernetes.io/load-balancer-arn: arn:aws:elasticloadbalancing:ap-northeast-2:490913547024:loadbalancer/app/GroomALb/fca97ed8d82cc52e
@@ -36,42 +37,54 @@ spec:
               service:
                 name: auth-service
                 port:
+
                   name: http
+
           - path: /common
             pathType: ImplementationSpecific
             backend:
               service:
                 name: common-service
                 port:
+
                   name: http
+
           - path: /user
             pathType: ImplementationSpecific
             backend:
               service:
                 name: user-service
                 port:
+
                   name: http
+
           - path: /store
             pathType: ImplementationSpecific
             backend:
               service:
                 name: store-service
                 port:
+
                   name: http
+
           - path: /payment
             pathType: ImplementationSpecific
             backend:
               service:
                 name: payment-service
                 port:
+
                   name: http
+
           - path: /ai
             pathType: ImplementationSpecific
             backend:
               service:
                 name: ai-service
                 port:
+
                   name: http
+
 
           - path: /order
             pathType: ImplementationSpecific
@@ -79,5 +92,7 @@ spec:
               service:
                 name: order-service
                 port:
+
                   name: http
+
 
