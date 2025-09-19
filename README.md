@@ -20,17 +20,30 @@
 ---
 
 ## 🏗️ Architecture
-- **Event-driven Architecture** 기반 메시지 브로커 활용  
-- **Kubernetes** 클러스터에서 MSA 서비스 오케스트레이션  
-- **CI/CD 파이프라인**: GitHub Actions (CI) + ArgoCD (CD): Canary 배포 
-- **Canary Deployment** 전략을 통해 점진적 트래픽 전환 및 안정성 확보  
+
+- **Event-driven Architecture**  
+  메시지 브로커를 활용하여 서비스 간 결합도를 낮추고 확장성·복원력을 강화  
+
+- **Kubernetes 기반 MSA 오케스트레이션**  
+  EKS 클러스터 위에서 각 서비스를 독립적으로 배포 및 관리  
+
+- **CI/CD 파이프라인**  
+  - **CI**: GitHub Actions 를 통해 빌드 및 테스트 자동화  
+  - **CD**: ArgoCD 를 활용한 GitOps 기반 배포  
+  - **Canary Deployment** 전략으로 점진적 트래픽 전환을 수행하여 안정성 확보  
+
+- **IaC (Infrastructure as Code)**  
+  Terraform 으로 VPC, EKS, RDS, IAM 등 클라우드 리소스를 선언적으로 관리하여 재현성과 일관성을 확보  
+
+- **Helm 기반 배포 자동화**  
+  Helm Chart를 활용해 Kubernetes 매니페스트를 템플릿화하고, EKS 클러스터에 일관된 방식으로 배포 자동화
 
 ---
 
 ## ⚙️ Tech Stack
 - **Backend**: Spring Boot (Java), Redis, Kafka
 - **AI**: Python 
-- **Infra**: AWS EKS, ECR, MSK , Kubernetes, Helm
+- **Infra**: AWS EKS, ECR, MSK , Kubernetes, Helm, Terraform 
 - **CI/CD**: GitHub Actions, ArgoCD  
 - **Monitoring**: Prometheus, Grafana, Loki  
 
